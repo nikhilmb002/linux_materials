@@ -1,0 +1,177 @@
+Threads
+-------
+
+* It is a light weight process.
+
+* It is single execution stream in a process which can be independently scheduled by kernel and share the same address space.
+
+* Threads share many attributes are common including data, code and heap section of memory, stack is unique to each thread.
+
+Need of creating threads ?
+	
+	* Context switch between thread are faster compare to the context switch between the processes.
+
+	(Loading and Unloading process is called context switch).
+
+	* Context switching between two thread then common thing is not loaded and unloaded.
+
+	-> In process PCB is created, In thead TCB is created.
+
+	*  between process to proceess communication need of ipc channel
+	   between threads communication no need ot any IPC, 
+	   communication between threads is easy than communication between 
+	   process.
+
+	* Threads creation is faster than process creation.
+
+
+Threads will share
+	
+	. pid, ppid
+	
+	. controlling terminal
+
+	. code, data, heap
+
+	. open file descriptors
+	
+	. signal disposition
+
+	. umask
+
+	. resource limits
+
+
+Threads specific attributes
+
+	. Thread ID
+	
+	. Signal mask
+
+	. Stack memory
+
+	. Thread specific data
+
+	
+	Context switch between threads,  only thread specific attributes. switching required not all attributes have less context switch time.
+
+	
+	communication between threads is easy (with global variables)
+
+
+
+
+pthread data types
+-------------------
+
+1. pthread_t 			:- thread identifier
+
+2. pthread_mutex_t 		:- mutex
+
+3. pthread_mutexattr_t 		:- mutex attribute object
+
+4. pthread_cond_t		:- condition variable
+
+5. pthread_condattr_t 		:- condition variable attribute object
+
+6. pthread_key_t		:- key for thread specific data
+
+7. pthread_once_t 		:- one time initialization
+
+8. pthread_attr_t		:- thread attributes object
+
+
+
+pthread_create
+-------------
+
+* Creates a new thread
+
+	#include <pthread.h>
+
+	int pthread_create(pthread_t* thread, const* pthread_attr_t* attr, void* (*start_routine) (void*), void* arg);
+
+	compile and link with -pthread
+
+	on success return 0
+	
+	on error return errno
+	
+	pthread_t is one data type
+
+	pthread_attr_t is also data type (thread attributes)
+
+
+pthread_join
+------------
+
+* Join with a terminated thread
+
+	int pthread_join (pthread_t thread, void** retval);
+
+	this function waits for the thread specified by thread to terminate. If the thread has already terminated, then pthread_join() return immediately.
+	
+	
+pthread_exit
+-----------
+
+* Terminate calling  thread
+
+	void pthread_exit(void* retval);
+
+	the pthread_exit() function terminates the calling threads and returns a value via retval that is available to another thread in the same process thatcause pthread_join().
+	
+	
+		
+
+
+
+
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

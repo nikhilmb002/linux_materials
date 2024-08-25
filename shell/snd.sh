@@ -1,0 +1,4 @@
+x=10
+FRIEND_IP="192.168.1.94"
+PORT=12345
+echo "$x" | nc "$FRIEND_IP" "$PORT"

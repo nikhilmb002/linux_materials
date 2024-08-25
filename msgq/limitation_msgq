@@ -1,0 +1,16 @@
+Limits of message queue
+-----------------------
+
+* msgq are connectionless 
+	
+	that is kernel doesn't maintain count of no.of process referring to the message queue.
+
+* msgq are referred to by identifiers, rather than file descriptors used by most I/O mechanisms. This means that a  variety of file descriptor based I/O technique can't be applied to message queue.
+
+* The use of keys rather than filenames, to identify msg queue results in additional programming complexity and also requires the ipcs and ipcrm instead of ls and rm.
+
+* There are limits on the total no.of message queues, the sizeof of messages, and the capacity of indivual queues. These limits are configurable, but an application operates outside the range of the default limits, the requires extra work when installing the application.
+
+* If a process is reading message from queue based on type kernel will check messages in queue based on type and then will clear the message, for checking type and clearing the message will take some time, hence make communication slow.
+
+

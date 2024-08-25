@@ -1,0 +1,170 @@
+Semaphore
+---------
+
+* It is a small positive integer which is present in a kernel space and which is used to synchronize between multiple process when they are accessing shared resource. 
+
+	1. semget()
+	2. semctl()
+	3. semop()
+
+	semget() is useful for creating as well as opening the semaphore set.
+	
+	semctl() is useful for setting the semaphore value and getting the semaphore value and doing some other control operation on the semaphore set.
+	
+	semop() is desired the process should enter into the critical section or not. It is also blocking function.
+
+
+
+* In the place of semaphore, fcntl  not used.
+* In the place of fcntl, semaphore is used.
+
+
+semget()
+--------
+
+* get a semaphore identifier
+
+	int semget(key_t key, int nsems, int semflg);
+
+using the semget() function, we can create the array of semaphore (array of integer).
+
+	
+	ipcs -s :- using this we can get currently how many semaphore set.
+
+
+semctl()
+--------
+
+* semaphore control operations
+
+	int semctl(int semid, int semnum, int cmd, ...);
+
+	GETVAL -> getting the value
+	SETVAL -> setting the value
+
+	by default when we create the semaphore set in kernel space all are zeros.
+
+
+semop()
+-------
+
+* semaphore operations
+
+	int semop(int semid, struct sembuf* sops, unsigned nsops);
+
+	struct sembuf {
+
+		unsigned short sem_num;	// semaphore number
+		short sem_op;	// semaphore operation
+		short sem_flg;	// operation flags
+	};
+
+	* sem_op decide process should enter or not enter the critical section.
+
+
+main() {
+
+	struct sembuf v;
+	int id, ret;
+	
+	id = semget(5, 5, IPC_CREAT | 0644);
+	
+	if(id < 0) {
+
+		perror("Semget");
+		return;
+	}
+	
+	printf("id = %d\n", id);
+
+	v.sem_num = 2;
+	v.sem_op =  		// +ve, -ve or 0
+	v.sem_flg = 0;
+
+	printf("Before...\n");
+	semop(id, &v, 1);
+	printf("After...\n");
+}
+
+1. If sem_op is zero, the process must have read permission on the semaphore set. This is a "wait for zero" operation. If semval is zero the operation can immediately proceed.
+
+2. If sem_op is +ve integer, the operation add this value to the semaphore value (semval). The operation can always proceed. It never forces a process to wait.
+	
+	v.sem_num = 2;
+	v.sem_op = 2;
+	v.sem_flg = SEM_UNDO;
+	
+	printf("Before ...\n");
+	semop(id, &v, 1);
+	sleep(10);
+	
+	+ve means always enter in a critical section.
+	
+3. If sem_op is less than zero, the process must have after permission on the semaphore set. If semval is greater than or equal to the absolute value of sem_op, the operation can proceed immediately the absolute value of the sem_op is substracted from sem_val.
+
+	* sem_val >= |sem_op|
+	   
+		1 >= |-2|
+
+		then block
+
+	* sem_val >= |sem_op|
+
+		4 >= |-2|
+		
+		Enter in critical section
+
+	v.sem_num = 2;
+	v.sem_op = -2;
+	v.sem_flg = 0;
+
+	printf("Before...\n");
+	semop(id, &v, 1);
+	sleep(1);
+	printf("done\n");
+	
+	if sem_val is 1, block
+	if sem_val is 2, enter in critical section
+	if sem_val is 3, also enter in critical section
+
+	
+
+
+Semaphore are 2 types
+---------------------
+
+1. Binary semaphore (only 0 & 1)
+2. Counting semaphore (all positive value allowed)
+
+We can use counting semaphore as a binary semaphore
+Binary semaphore can not use as a counting semaphore
+
+
+
+Deadlock
+--------
+
+deadlock is a situation in which two or more processes are unable to proceed because each is waiting for the other to release resources or take an action.
+
+ 
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

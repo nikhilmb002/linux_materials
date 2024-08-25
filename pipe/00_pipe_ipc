@@ -1,0 +1,100 @@
+Inter process communication 
+---------------------------
+
+* Basically process are of 2 types
+
+	1. Independent process
+	
+	2. Co-operating process 
+
+	Independent process means the process which is not affected by other process execution. 
+
+	Co-operating process is a process which is effected by other process execution.
+
+	In general one process can not accesses the other processes data, OS willn't allow one process to access other process information.
+ 	
+	But if there is a need of one process should access the other process data then there is a requirement of proper channel. 
+
+	The mechanisms available for communications are 
+
+		* pipes
+		* named pipe(FIFO)
+		* message queue
+		* shared memory			
+
+
+		* semaphores (it is for process synchronization) 
+
+		pipes and named pipes are using file management.... 
+
+		shared memory are based on memory management....If OS is not supporting memory management it is difficult to use shm....
+
+		message que is not depending on file management, memory management......................................................
+
+		
+
+
+PIPES 
+-----
+
+* Operations involved in pipes are 
+
+	1. create the pipe
+	
+	2. Write the data
+	
+	3. Read the data
+
+	
+All these IPC mechanisms are created in Kernel space...
+
+Note : using PIPE only related process (parent and child) can communicate non related process can't.	
+
+	related process means like parent and child process...
+
+	
+
+How to create pipes
+
+	by using pipe() call...
+
+
+	in pipe it is unidirectional dataflow...
+
+	data flows from write end to read end...
+
+	
+	
+	pipe()
+	------
+
+	* Reading from empty pipe (if any process reading data from empty pipe) process get blocked. 
+	
+	* writing into full pipe (if pipe is completely full with data) process blocked. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
