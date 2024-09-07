@@ -22,7 +22,7 @@ void* thread1(void* p) {
 
 	while(1) {
 	
-		scanf("%s", buf);
+		scanf(" %s", buf);
 		write(fd, buf, strlen(buf)+1);
 	}
 }
@@ -42,7 +42,7 @@ void* thread2(void* p) {
 	while(1) {
 	
 		read(fd, buf, sizeof(buf));
-		printf("%s\n", buf);
+		printf(" %s\n", buf);
 	}
 }
 

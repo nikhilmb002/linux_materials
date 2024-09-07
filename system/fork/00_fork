@@ -1,0 +1,121 @@
+Fork
+-----
+
+fork() creates a new process by duplicating the calling process. The process is referred to as the child process. The calling process is referred to as the parent process.
+
+pid_t fork(void);
+
+
+#include <stdio.h>
+#include <unistd.h>
+int main() {
+
+	printf("hi\n");
+	fork();	// new process created
+	printf("bye...\n");
+}
+
+/* hi 
+   bye...
+   bye...
+*/
+
+	then child process
+
+	main() {
+
+		printf("hi\n"); //1
+		fork();	//2
+		printf("bye...\n");
+	}
+
+	but in child 1 and 2 are not executed in child...
+	lines after fork will execute in child process...
+
+		
+when child process created everything (code, stack, data, heap) is duplicated from parent process...
+
+
+	in child process 1 and 2 lines are disabled... it executes under the fork() only...
+
+	Using fork which(parent or child) will work can't be predicted... Because it depends upon time slice.
+
+
+	/* 02.c 
+
+	   int main() {
+
+	   printf("Hii...\n");	//1
+	   fork();	//2
+	   fork();	//3
+	   printf("Hello...\n"); //3
+	   }
+
+	// Because of line 2 one child process /*child1*/
+
+	int main() {
+
+		-----
+		fork(); //3
+		printf("Hello...\n"); //
+	}
+
+	// Because of line 3 one child process /*child2*/
+
+	int main() {
+	
+		------
+		printf("Hello...\n");
+	}
+
+	// Because of line 3 in child 2 one more child
+	
+	int main() {
+	
+		------
+		printf("Hello...\n");
+	}
+			
+
+	refer 03_return.c
+
+
+	when a fork() is executed it creates a new process that is child process. 
+
+fork() failing situations
+-------------------------
+
+* when we are creating no.of processes more than limit of every OS...
+	every os have max no.of process...
+* when a fork system call is success child process is created...Every process have pcb. pcb created... no.of pcb also created...pcb contents are stored in kernel stack memory area... if no.of pcb created memory also needed. if memory is no there left then also.
+
+
+when a process is created by default each process associated with 3 buffers
+
+1. stdin  -> standard input
+2. stdout -> standard output
+3. stderr -> standard error 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

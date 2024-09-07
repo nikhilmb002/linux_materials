@@ -1,0 +1,60 @@
+system
+------
+system execute shell command
+
+int system(const char* command);	
+
+	01_sys.c
+
+	02_sys.c
+
+	cc 02_sys.c -o p2 then executable file genereated.
+
+	bash is parent for a.out process
+	
+	a.out process start execution then hai msg printed...
+
+	system(pwd) : call sh shell internally -> pwd
+
+	system(cal) : call sh shell internally -> cal
+
+	once this completed hello msg also print
+	
+
+	03_sys.c
+	04_sys.c 
+
+	bash -> p3 -> sh -> p4
+
+	p4 -> sh (parent)
+	sh -> p3 (parent)
+	p3 -> bash (parent)
+
+	system function to execute command or to execute another process within a process possible
+
+	When using system fucntion no.of jobs created are more
+	system function follows the sequential execution
+	
+	int main() {
+		
+		printf("hi\n");
+		fork();
+		printf("bye\n");	
+	}
+
+	/* hi
+	   bye
+	   bye
+	*/
+
+	in previous example 
+
+	child  process have duplicate of the parent process
+
+	int main() {
+		
+		printf("hi\n");	//1
+		fork();	//2
+		printf("bye\n");
+	}
+

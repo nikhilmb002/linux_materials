@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <pthread.h>
+#include <unistd.h>
 
 void* thread1(void* p) {
 
@@ -24,6 +25,7 @@ int main() {
 	printf("Main thread code execution ...\n");
 	sleep(10);
 	printf("main thread(process) finished ...\n");
+
 //	while(1);
 
 }

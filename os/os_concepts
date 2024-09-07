@@ -1,0 +1,123 @@
+OS Concepts with Linux
+----------------------
+
+what is os ?
+	
+	OS is a software that controls hardware.
+
+	Advantages
+	----------
+	
+	* Multitasking
+	
+	* Manage the resources effectively
+
+	* Resource allocate / resource manager
+
+why linux ?
+
+	It will support for around 20 architecture and linux is open source.
+
+What are the components of OS ?
+
+	1. Application 
+	
+	2. Services	
+
+	Kernel is called the core of an operating system. 
+	Services are mandatory. 
+	Applications are optional
+
+	
+Booting process of Linux
+
+	1.BIOS (Basic Input Output System) 
+		
+		present in ROM chip, manufacture burns one program into ROM  chip called BIOS.
+
+		BIOS will check that before loading OS, it will check if basic input/output system like hdd, RAM etc ... is present or not, then only to proceed ahead otherwise not.
+
+	2.If everthing is ok Then Bios will run one program called MBR (Master Boot Record) (a file of 12 bytes) present in the starting portion of HDD. 
+
+	3.MBR executes GRUB (Grand Unified bootloader).
+
+	4.GRUB will load kernel.
+
+	5.Kernel will load all the services. (load some temp file system, mount the file system).
+
+	6.Its starts the service called init.
+
+	7.Run level program
+		
+		init process initiates all services. 
+		All the services (drivers) are loaded in to the RAM.
+
+	Init is the first process created and then it initiates the another services. 
+
+
+
+Process and Process Management
+------------------------------
+
+* The program which is in execution is called process.	
+
+* The executable file which is loaded into the RAM for execution technically, we call as process. 
+
+* Life of an executeable file ends when we intentionally remove it by "rm" command or overwrite it. 
+
+* CPU execute the instruction as all the code present in the RAM.
+
+* If multiple processing environment, multiple process executes process executes simultaneously.
+
+
+Multiprocessing
+---------------
+
+Hardware Multiplexing	
+---------------------
+
+* High perfomance
+
+* High cost
+
+* Responsibility of OS is low.
+
+
+Software Multiplexing
+---------------------
+
+* Low perfomance
+
+* Low cost
+
+* Responsibility of OS is high.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -14,7 +14,7 @@ void* thread1() {
 void* thread2() {
 
 	printf("Thread2 code started ...\n");
-	sleep(5);
+	sleep(10);
 	printf("Thread2 terminated...\n");
 }
 

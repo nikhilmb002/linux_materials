@@ -1,0 +1,86 @@
+Shell
+------
+
+* Shell is a special user program that provides an interface for the user to use operating system services.
+
+* Shell accepts human readable commands from users and converts them into something which the kernel can understand.
+
+* It is a command language interpretter that executes commands reads from input devices such as keyboards or from files.
+
+* The shell gets started when the user logs in or starts the terminal.
+
+
+Terminal
+--------
+
+* A program which is resoponsible for providing an interface to a user so that he/she can access the shell.
+
+* It allows users to enter commands and see the output of those commands in a text-based interface.
+
+
+Advantages of Shell scripts
+---------------------------
+
+* Writing shell scripts are much quicker
+
+* Quick start
+
+* Interactive debugging.
+
+
+Disadvantages
+-------------
+
+* Prone to costly errors
+
+* Slow execution speed
+
+* Not well suited for large and complex task
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

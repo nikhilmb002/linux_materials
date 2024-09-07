@@ -1,0 +1,91 @@
+Signal
+------
+
+* Signal is disturbance to the program normal execution.
+
+* Signal are also called as software interrupts. 
+
+* When a process execution normally because of some reason if execution of process get disturbed then we have to say process get a signal.
+
+kill -l (we get all signal numbers and names)
+
+ 1) SIGHUP	 2) SIGINT	 3) SIGQUIT	 4) SIGILL	 5) SIGTRAP
+ 6) SIGABRT	 7) SIGBUS	 8) SIGFPE	 9) SIGKILL	10) SIGUSR1
+11) SIGSEGV	12) SIGUSR2	13) SIGPIPE	14) SIGALRM	15) SIGTERM
+16) SIGSTKFLT	17) SIGCHLD	18) SIGCONT	19) SIGSTOP	20) SIGTSTP
+21) SIGTTIN	22) SIGTTOU	23) SIGURG	24) SIGXCPU	25) SIGXFSZ
+26) SIGVTALRM	27) SIGPROF	28) SIGWINCH	29) SIGIO	30) SIGPWR
+31) SIGSYS	34) SIGRTMIN	35) SIGRTMIN+1	36) SIGRTMIN+2	37) SIGRTMIN+3
+38) SIGRTMIN+4	39) SIGRTMIN+5	40) SIGRTMIN+6	41) SIGRTMIN+7	42) SIGRTMIN+8
+43) SIGRTMIN+9	44) SIGRTMIN+10	45) SIGRTMIN+11	46) SIGRTMIN+12	47) SIGRTMIN+13
+48) SIGRTMIN+14	49) SIGRTMIN+15	50) SIGRTMAX-14	51) SIGRTMAX-13	52) SIGRTMAX-12
+53) SIGRTMAX-11	54) SIGRTMAX-10	55) SIGRTMAX-9	56) SIGRTMAX-8	57) SIGRTMAX-7
+58) SIGRTMAX-6	59) SIGRTMAX-5	60) SIGRTMAX-4	61) SIGRTMAX-3	62) SIGRTMAX-2
+63) SIGRTMAX-1	64) SIGRTMAX	
+
+* signal generated using 2 methods
+
+	1. Other processes 	2. Hardware (eg : ^C)
+
+Other process or Hardware not send directly, send via signal manager.
+
+* Life of the signal start when somebody generate the signal. 
+
+* Life of the signal ends when signal manager deliver the signal to the particular process.
+
+
+
+kill
+----
+
+#include <sys/types.h>
+#include <signal.h>
+
+int kill(pid_t pid, int sig);
+
+if atleast one signal send successfully it returns 0. On failure returns -1.
+
+
+raise
+-----
+
+raise send a signal to the caller.
+
+int raise(int signal);
+
+return 0 on sucess. non zero on failure.
+
+
+pause
+-----
+
+int pause(void);
+
+pause() causes the calling process or thread to sleep until a signal is delivered that either terminates the process or causes the invocation of a signal catching information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

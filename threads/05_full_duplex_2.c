@@ -9,7 +9,7 @@
 #include <unistd.h>
 
 void* thread1(void* p) {
-
+	
 	int fd;
 	char buf[50];
 	fd = open("f1", O_RDONLY);
@@ -41,7 +41,7 @@ void* thread2(void* p) {
 
 	while(1) {
 	
-		scanf("%s\n", buf);
+		scanf(" %s", buf);
 		write(fd, buf, strlen(buf)+1);
 	}
 }

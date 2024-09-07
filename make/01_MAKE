@@ -1,0 +1,88 @@
+# hello: 
+#	echo "Hello, World"
+#	echo "This line will print if the file hello doesn't exist"
+
+# test: test.c
+#	cc test.c -o test
+
+#define the target 'test' that depends on 'test.o'
+
+#test: test.o 
+#	cc test.o -o test  #runs third
+
+#define how to create 'test.o' from test.c
+
+#test.o : test.c
+#	cc -c test.c -o test.o	#runs second
+
+#define how to create 'test.c' if it doesn't exist
+
+#test.c:
+#	echo "int main() { return 0; }" > test.c # runs first
+
+#some_file: other_file
+#	echo "This will always run, and runs second"
+#	touch some_file
+
+#other_file:
+#	echo "This will always run, and runs first"
+
+## some_file: 
+##	touch some_file
+
+##clean: 
+##	rm -f some_file
+
+
+#files := f1 f2
+#some_file: $(files)
+#	echo "Look at this variable : " $(files)
+#	touch some_file
+
+#f1: 
+#	touch f1
+
+#f2:
+#	touch f2
+
+#clean: 
+#	rm -f f1 f2 some_file
+
+#a := one two # a is set to the string "one two"
+#b := 'one two' #not recommended.
+#all :
+#	printf '$a'
+#	printf $b
+#
+
+x := hai
+all: 
+	echo $(x)
+	echo ${x}
+	echo $x		# bad practise, but works
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

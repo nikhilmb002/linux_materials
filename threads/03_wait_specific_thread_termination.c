@@ -14,7 +14,7 @@ void* thread1() {
 void* thread2() {
 
 	printf("Thread2 code started ...\n");
-	sleep(5);
+	sleep(10);
 	printf("Thread2 terminated...\n");
 }
 
@@ -27,5 +27,5 @@ int main() {
 	printf("Main thread waiting for thread1 termination ...\n");
 	pthread_join(t1, 0);	// waiting for specific thread termination
 	printf("main thread going to terminate ...\n");
-
+	return 0;
 }

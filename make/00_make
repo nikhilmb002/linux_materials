@@ -1,0 +1,37 @@
+Makefiles are used to help decide which parts of a large problem need to be recompiled. 
+
+targets: prerequesties
+	command
+	command
+	command
+
+
+
+files := f1 f2
+some_file: $(files)
+        echo "Look at this variable : " $(files)
+        touch some_file
+
+f1: 
+        touch f1
+
+f2:
+        touch f2
+
+clean: 
+        rm -f f1 f2 some_file
+
+
+/* 
+
+files := f1 f2 
+
+	this line defines a variable named files and assigns it the values f1 and f2. 
+
+some_file : $(files)
+	echo "Look at this variable : " $(files)
+	touch some_file
+
+	some_file depends up on the files variable (f1 and f2). 
+
+
