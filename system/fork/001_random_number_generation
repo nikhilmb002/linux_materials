@@ -1,0 +1,8 @@
+Random number generation
+------------------------
+
+the rand() function returns a pseudo-random integer in the range 0 to RAND_MAX inclusive.
+
+the srand() function sets its argument as the seed for a new sequence of pseudo-random integeres to be returned by rand(). These sequences are repeatable by calling srand() with the same seed value.
+
+If no seed value is provided, the rand() function is automatically seeded with a value of 1.  

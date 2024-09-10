@@ -1,0 +1,22 @@
+system vs fork()
+----------------
+
+-> System function creates a process
+-> fork() also creates a process
+-> system function, internally connected to sh shell(with the help of sh shell command got executed)
+-> fork willn't invoke sh shell
+-> system is a library function
+-> fork is a system call 
+-> system() function will follow the sequential execution
+-> using fork() new process created (called child process) both parent and child will run concurrently (parallel)
+-> when using fork(), its process created sh shell not involved hence number of process created are minimized os compared to system function.
+-> fork() return value
+	on success 0 -> child
+	child pid -> parent
+	on failure -> -1
+
+when fork() fails
+------------------
+* Every kernel is having a limit on how many processes can handle once it reaches to that limit, no more processes created, in this case fork() fails returns -1. 
+
+* For every process creation PCB also created, every PCB stored in kernel stack, so more processes leads to more PCB creation, int this case if process manager unable to create PCB (due to shortage of memory) fork() cannot create process.
