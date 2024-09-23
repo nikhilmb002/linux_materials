@@ -76,6 +76,60 @@ How to create pipes
 
 
 
+* Pipe created means temporary buffer created in kernel space ...
+  
+  Only with the help of file descriptor we can pipe ...
+
+
+Observations
+-----------
+
+1. Close the write end of the pipe after that try to read the data from the pipe.
+	
+	close(fd[1]);
+
+	then read returns zero.
+
+2. Close the read end of the pipe after that try to write the data into pipe (In this case use while(1))
+
+	close(fd[0])
+
+	normally it terminates the process by recieving SIGPIPE signal.
+
+	signal(SIGPIPE, isr);
+
+	void isr (int n) {
+
+		
+	}
+
+	normally isr terminates the program.
+
+
+
+
+Limitations of Pipe
+-------------------
+
+* Using pipe only related process can communicate non related process cannot communicate.
+
+* When pipe is created, there is no name existing in the file system, it is just a temporary buffer created in kernel space.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

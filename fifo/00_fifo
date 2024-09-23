@@ -1,0 +1,31 @@
+Named Pipe (FIFO)
+-----------------
+
+fifo - first in first out special file
+
+When processes are exchanging data via the FIFO, the kernel passes all data internally without writing it to the file system.
+
+
+How to create named pipe ?
+
+1. Using mkfifo function
+	
+	int mkfifo(const char* path, mode_t mode);
+
+2. Using mkfifo command
+
+	$mkfifo name_of_the_named_pipe
+
+
+
+ls -l 
+total 24
+-rw-rw-r-- 1 nikhil nikhil   366 Sep 20 19:09 00_fifo
+-rw-rw-r-- 1 nikhil nikhil   167 Sep 20 19:35 01_create_fifo.c
+prw-rw-r-- 1 nikhil nikhil     0 Sep 20 19:35 np
+-rwxrwxr-x 1 nikhil nikhil 16008 Sep 20 19:37 p1
+
+-r for regular file
+p for pipe file
+
+

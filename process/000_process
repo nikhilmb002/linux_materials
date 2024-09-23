@@ -1,0 +1,167 @@
+Process
+-------
+
+What is a process ?
+
+A program which is under execution is called process. 
+
+./a.out -> process running in foreground
+./a.out& -> process running in background
+
+when a process started execution process manager will provide the unique id called as pid.
+
+Daemon process : A Daemon process is special process that is created and handled by the system in the same way as other process.
+		 Daemon process will start running once system booting completed, they terminate when system shutdown.
+		 Many services are started as daemons.
+
+		 fg will bring background process to foreground
+		 fg jobid -> according to jobid particular process is getback a foreground
+
+Multiprocessing
+---------------
+
+1. Hardware multiprocessing
+	
+	in case of hardware multiprocessing for every application, seperate hardware (CPU) is presented.
+
+2. Software multiprocessing
+	
+	in case of software multiprocessing all applications will run on a single CPU with help of OS.
+	
+
+
+/proc/sys/kernel/pid_max -> pid max range 
+
+4194304 -> for my system
+
+pid for my system ranges from 0 to 4194304
+
+0 -> scheduler
+1 -> init process
+
+once pid values reaches pid max range again will start from 300 before 300 many numbers are reserved. 
+
+During the life of a process it may enter into different states.
+
+State of process
+----------------
+
+-> Ready state
+-> Running state
+-> Wait state
+-> Delay state
+-> Suspended state
+
+
+Ready state
+-----------
+
+	If the process is in ready state it needs CPU but nothing. Once it dispatched to CPU then it is in running state.
+
+Running state
+-------------
+
+	Process is executed by CPU.
+
+Wait state
+----------
+
+	waiting for an external event to finish. 
+	let us consider scanf(). 
+
+	new process ---------> ready ---------> Running
+                     admitted        dispatcher
+
+	during run time if it waiting for external events then it goes to wait state and if events completed then it goes to ready state. when the cpu is completed other tasks then again dispatcher dispatches to running state. 
+
+
+
+Delayed State
+-------------
+	
+	process intentionally goes to delay state (by providing sleep()). 
+
+new -> ready --------------> CPU  
+	^	dispatcher    |
+	|		      |
+	| delay complted		  
+	|		     delay
+	______________________|
+
+
+
+dispatcher is a module in process manager it gives control of the CPU to the process.
+
+
+
+Suspended State 
+---------------
+
+During the life of a process it is possible to suspend the process by sending signal.
+
+kill -19 process_id for suspend the process
+kill -18 process_id for resume the process
+			
+			dispatcher
+new ---------> ready  --------------->  (p1) CPU
+     admitted	  ^			  |
+		  | 			  |  kill -19 pid
+     kill -18 pid |  resume		  |
+		  |_______________________|
+			  suspended
+
+
+Note : when any process receiving signal 9 then process is terminate...
+
+
+
+CPU bound vs I/O bound
+----------------------
+
+* A process in its life time always demands the CPU that process is called CPU bound process
+
+	main() {
+
+		pf("hello");
+		while(1);	// always demanding CPU that is normally CPU bound process.
+	}
+
+
+	
+	________________
+	|		|		     ___________ CPU
+	|  p1	   p2	|    dispatcher	     |		|	
+	|  p3  		|------------------> |	p1  p2	|  (10 ms)
+	| 		|		     |	  p3	|	timeslice
+	-----------------		     ------------
+
+But in Software multiprocessing there should be time slice... so CPU bound process get the timeslice time only...
+
+
+
+
+I/O bound
+---------
+
+	A process in its life time always not required the CPU. Those Jobs are called I/O bound process. 
+
+	ex : shell
+
+	According process manager I/O bound jobs are preferable.
+
+
+Shell
+-----
+	
+	shell is a command interpreter.
+
+22/6
+
+
+
+
+
+
+
+
+
