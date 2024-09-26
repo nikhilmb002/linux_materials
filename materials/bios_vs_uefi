@@ -1,0 +1,46 @@
+BIOS 
+----
+
+* Architecture : 16 bit, limited memory
+
+* Boot Method : MBR - based (2 TB disk limit)
+
+* Interface : Text based, keyboard navigation
+
+* Bootloader : MBR bootloader
+
+* Security : No secure boot
+
+* Boot speed : Slower, sequential intialization
+
+* Partition Support : MBR (4 primary partition)
+
+* Extensiblity : Limited
+
+* Compatability : Legacy systems
+
+
+UEFI
+----
+
+
+* Architecture : 32 or 64 bit, supports larger memory
+
+* Boot Method : GPT based (>2 TB disk limit)
+
+* Interface : GUI based, Supports keyboard and mouse
+
+* Bootloader : Loads OS directly from ESP
+
+* Security : Supports secure boot
+
+* Boot speed : Faster, parallel intialization
+
+* Partition Support : GPT (128 primary partition)
+
+* Extensiblity : Modular and extensible
+
+* Compatability : Modern systems with BIOS compatablity
+
+
+

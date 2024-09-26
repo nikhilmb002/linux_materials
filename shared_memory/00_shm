@@ -1,0 +1,6 @@
+Shared memory
+-------------
+
+Shared memory is a memory segment can be accessed by mutiple processes. It allows processes to communicate and share data efficiently. This is achieved by creating a memory region that is mapped into the address space of each participating process, facilating direct read and write operations.
+
+

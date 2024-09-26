@@ -1,0 +1,259 @@
+File handling using system calls
+--------------------------------
+
+* system calls available are
+
+	open()		write()		lseek()	
+	create()	close()		dup()
+	read()		fcntl()		dup2() ..............
+
+  system calls are supported by kernel
+  library functions are supported by compiler
+
+  
+
+	fgetc() fgets() fscanf() 
+
+	if use 3 above 3 function calls it internally calls read()
+
+	fopen() -> open() 
+
+	
+
+* When system calls used on files, there is file descriptor
+
+	filedescriptor : A small non negative integer useful when working with files
+
+	fputc() fputs() fprintf() 
+
+		  |
+	      	write()
+		  ^
+		  |
+		  OS
+
+Using system calls possible to open any type of file like regularfile, specialfile(driverfile), pipefile, socket()
+
+
+* When a process is created PCB created.
+
+* Similiarly when a process is created by default three file descriptors are associated with each process
+
+	File descriptor			stdiostream
+	--------------- 		------------
+
+		0			stdin
+		1			stdout
+		2			stderr
+
+		
+	________
+	|	| -> 0 (stdin)	
+	|	|	
+	|	| -> 1 (stdout)	--
+	|	|		  |--> console
+	|	| -> 2 (stderr) --`
+	---------
+
+	
+01_close_stdout.c
+02_close_stdin.c
+
+
+Operations on files
+-------------------
+
+* Open or create the file
+
+* read / write
+
+* close the file
+
+
+
+How to open file ?
+
+	Using open sys call
+
+	int open(const char* path, int flags);
+
+	on success fd returned.
+	on failure -1.
+
+	
+	flags
+	-----
+
+	* Mandatory
+	* Optional 
+
+	Mandatory
+	---------
+	
+	* O_RDONLY 
+	* O_WRONLY
+	* O_RDWR
+
+
+	optional
+	--------
+
+	* O_CREAT
+	* O_EXCL
+	* O_APPEND
+	* O_TRUNC
+
+
+	03_fd.c
+
+	fopen("temp", "w");	// open it for write mode, if file not there
+				// create, already there truncate
+
+	open("temp", O_WRONLY);	// if already file exists, then only it opens
+
+	open("temp", O_WRONLY | O_CREAT | O_TRUN); // if already file it trunctes and then open, if doesn't exists then create new one
+
+	open sys call return file descriptor
+	
+	open("temp", O_WRONLY | O_CREAT | O_TRUNC, 0664);
+						     |
+						     |
+						     ----> file permissions
+
+	0664 -> it will effect file created using O_CREAT flag. If file already available then mode values are passed.
+
+
+	file permissions : mode & ~(umask)
+
+			  0664  =  110 110 100
+						&
+			 ~0002  =  111 111 101 
+			------------------------
+				   110 110 100 
+                                   rw- rw- r--
+
+
+
+	fopen("temp", "r"); -> open("temp", O_RDONLY);
+	
+	fopen("temp", "w+"); -> open("temp", O_RDWR | O_CREAT | O_TRUNC, 0664);
+
+	fopen("temp", "r+"); -> open("temp", O_RDWR);
+
+	fopen("temp", "a"); -> open("temp", O_WRONLY | O_CREAT | O_APPEND, 0664);
+
+	fopen("temp", "a+"); -> open("temp", O_RDWR | O_CREAT | O_APPEND, 0664);
+
+	
+
+* Each and every mode of fopen() there is a open sys call
+
+* But what ever open() sys call is doing (file operations) all operations not possible with fopen(). 	
+	
+
+read()
+------
+
+attempts to read upto count bytes from file descriptor fd into the buffer starting at buf.
+
+if count is 0, read returns zero and has no other results. if count is greater than SSIZE_MAX, the result is unspecified. 
+
+cat > temp 
+abcdef
+cat temp 
+abcdef
+
+ssize_t read(int fd, void* buf, size_t count);
+	      |	     |		|_________ no.of byts to read (max 147483647) 
+	   from	   storage	
+	  the file	after reading
+
+
+ 05_read.c
+ 06_read.c
+
+
+memset()
+---------
+
+fill memory with a constant byte
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

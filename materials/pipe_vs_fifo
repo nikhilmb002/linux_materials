@@ -1,0 +1,14 @@
+PIPE
+----
+
+* Scope :- Used for communication between processes that have a parent-child relationship. 
+
+* Creation :- Created using pipe() system call.
+
+* Naming :- No name is associated with the pipe, so it is only available for the processes that create it (usually related processes).
+
+* Lifetime :- Exists only as long as the processes are running.
+
+* Usage :- Commonly used to transfer data between processes in a one-way or unidirectional manner.
+
+

@@ -1,0 +1,12 @@
+Signals
+-------
+
+* Signals are asynchronous, meaning a process can recieve a signal at any time. 
+
+* Signals can either be handled by the process in a custom way, ignored, or the default action can be used.
+
+
+Types of signals
+----------------
+
+1. Standard signals : These are predefined by the system and include signals like 
