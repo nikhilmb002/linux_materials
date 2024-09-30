@@ -1,0 +1,200 @@
+ps    :- list the process executing in the current terminal 
+
+ps -e :- list all the proceess in the system 
+
+ps -l :- list process information in long format  
+
+ps -e | grep pts/1 : the info of ps -e temporarily stored in the pipe. And grep (global regular expression) will search for the particular pattern. grep will take information from the pipe and if the pattern is found display the entire line.
+
+Process Control Block (PCB)
+---------------------------
+
+=> When a process is created, for every process manager will create the PCB
+=> PCB contains information about a process in data structure manner
+
+	Information like 
+
+		* Process state
+		* PID, PPID
+		* Program counter 
+		* CPU Register values 
+		* CPU scheduling info 
+		* Memory info 
+		* Open files 
+
+
+	Example : CPU Time Slicing and PCB
+
+	Consider 3 programs 
+
+		p1 : 200 lines of code 
+		p2 : 100 lines of code 
+		p3 : 400 lines of code 
+
+		These programs are loaded into memory are converted into processes by the OS.
+	
+	CPU Scheduling Using Time Slicing
+
+		Assume the CPU uses RR scheduling with a time slice of 10 milliseconds for each process 
+
+		Execution Assumptions 
+
+		In 10 ms :
+		
+			* p1 executes 50 lines 
+			* p2 executes 30 lines 
+			* p3 executes 40 lines 
+	
+	Execution Flow 
+
+	1. p1 starts executing first. 
+
+		p2 & p3 remain in the ready state, waiting for the CPU 
+		After 10 ms, P1's time slice expires 
+
+	2. Before p1 leaves the CPU 
+
+		The current execution context of p1 is saved in its PCB
+		This includes the last executed instruction and CPU state
+	
+	3. p2 gets the CPU next 
+
+		Executes 30 lines within its time slice.
+		Its context is saved into PCB (p2) when the time slice ends
+
+	4. p3 then gets the CPU 
+
+		Executes 40 lines.
+		its context is saved into PCB (p3)
+
+	5. This cycle repeats until all processes complete execution. 
+
+
+ 	PCB Structure (Concpetual View)
+	
+
+		[   Stack Pointer (SP)   ]
+		[   Process ID (PID)     ]
+		[   Parent PID (PPID)    ]
+		[   Program Counter (PC) ]
+		[   Memory Information   ]
+		[   I/O Status           ]
+
+	
+	Context Switch (switching from one process to another process)
+	--------------------------------------------------------------
+
+		A context switch is the mechanism to store and restore the state or context of a process into PCB. So that a process execution can be resumed from the same point at a later time. 
+
+	Using context switch multiple processes will share a single CPU 
+	
+	Context switch is mandatory for multiprocessing 
+
+	For every process switch, there is a need of context switch 
+
+	Due to context switch extra burdne on CPU, But without context switch acheving the mutliprocessing is not possible
+
+	It is impossible to make context switch time to 0. But it is possible to minimize the context switch time using threads. 
+
+	Life of PCB is life of the process. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	

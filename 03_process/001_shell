@@ -1,0 +1,23 @@
+Shell
+-----
+
+shell : is command interpreter
+
+	It is interface between user & OS 
+
+	[ USER ] -> [ Shell ] -> [ OS ]
+
+
+echo $SHELL
+/bin/bash
+	
+$ ps
+
+   PID TTY          TIME CMD
+   1162 pts/1    00:00:01 bash
+   1939 pts/1    00:00:00 ps
+
+
+   Most of the time shell is waiting for the I/O events. 
+
+
