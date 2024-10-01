@@ -1,0 +1,32 @@
+Random Number Generation
+------------------------
+
+To generate random numbers in C, we use the functions rand() and srand(). 
+
+1. rand() 
+
+	* rand() returns a pseudo-random integer
+	* The value is in the range 0 to RAND_MAX
+	* RAND_MAX is a constant defined in <stdlib.h>
+
+2. srand() 
+
+	* srand() is used to initialize the random number generator
+	* it sets the seed value for generating a new sequence of pseudo-random numbers
+	* if srand() is not used, rand() produces the same sequence every time the program runs
+
+3. Default behaviour 
+
+	* If srand() is not called, the random number generator behaves as if srand(1) was called. 
+	* This means rand() will generate the same sequence of numbers every time the program runs. 
+
+4. Common practice 
+
+	* srand() is usually called once at the start of the program 
+	* time(NULL) is commonly used as the seed value to get different results on each run
+
+
+
+	refer 17.c 
+	refer 18.c
+	refer 19.c

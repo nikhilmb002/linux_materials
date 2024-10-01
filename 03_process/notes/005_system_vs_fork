@@ -1,0 +1,20 @@
+* system function create a process 
+* fork() also creates a process 
+* system function, internally connected to sh shell (with the help of sh shell command get executed ) 
+* fork() will not inovke sh shell
+* system() is a library function 
+* fork() is a system call 
+* system() function will follow the sequential execution 
+* using fork() new process created (called child proces) both parent and child will run concurrently (parellely)
+* when using fork(), its process created sh shell not involved hence no.of process created are minimized as compared to system function
+* fork() returns 
+	on success : 0 to child 
+		     child PID to parent 
+
+	on failure : -1
+
+	when fork() fails : 
+
+		Every kernel is having a limit how many process can handle, once it reaching to that limit no more process created, in that case fork() returns -1.
+
+		For every process creation PCB is also created, every PCB stored in kernel stack, so more process creaation leads to more PCB creation, in this case if process manager unable to create pcb (due to shortage of memory). in that case also fork() return -1. 
