@@ -1,0 +1,217 @@
+Linux Booting Process - Explained
+=================================
+
+Overview:
+---------
+Booting is the process of starting a computer and loading the Linux operating
+system into memory. This involves several stages, from powering on the system
+to getting a login prompt or desktop.
+
+Modern Linux boot process typically follows:
+    BIOS/UEFI -> Bootloader (GRUB) -> Kernel -> Init (systemd) -> Targets
+
+Older systems used:
+    BIOS -> MBR -> GRUB -> Kernel -> init -> Runlevels
+	
+
+1. BIOS / UEFI (Firmware)
+-------------------------
+
+BIOS (Basic Input/Output System) is firmware stored in a chip on the motherboard.
+It is responsible for performing hardware checks and locating the boot device.
+
+Newer systems use UEFI (Unified Extensible Firmware Interface), which is more
+advanced and supports larger disks, secure boot, and graphical interfaces.
+
+BIOS / UEFI does the following:
+    - Runs POST (Power-On Self Test)
+    - Initializes hardware (keyboard, display, storage)
+    - Identifies bootable devices
+    - Loads bootloader from disk (MBR or EFI partition)
+
+------------------------------------------------------------------------------
+
+2. MBR / GPT (Partition Table Schemes)
+--------------------------------------
+
+After BIOS/UEFI, the system reads the partition table to find the bootloader.
+
+MBR (Master Boot Record):
+    - First sector (512 bytes) of the bootable disk
+    - Contains:
+        - Bootloader code (446 bytes)
+        - Partition table (64 bytes)
+        - Boot signature (2 bytes)
+    - Supports only 4 primary partitions
+    - Supports disks up to 2TB
+    - Used in older BIOS-based systems
+
+GPT (GUID Partition Table):
+    - Replaces MBR on UEFI systems
+    - Supports more than 128 partitions
+    - Supports disks larger than 2TB
+    - Stores multiple copies of partition data for redundancy
+    - Bootloader is stored in EFI System Partition (ESP)
+
+------------------------------------------------------------------------------
+
+3. Bootloader (GRUB / systemd-boot)
+-----------------------------------
+
+After MBR or GPT is read, the bootloader is executed.
+
+GRUB (GRand Unified Bootloader):
+    - Common bootloader in Linux
+    - Allows selecting OS (multi-boot)
+    - Loads the Linux kernel and initrd/initramfs into memory
+    - Transfers control to the kernel
+
+Other bootloaders:
+    - LILO (Legacy, rarely used now)
+    - systemd-boot (used in modern UEFI systems)
+
+Bootloader configuration files:
+    - GRUB: /boot/grub/grub.cfg or /etc/grub.d/
+
+------------------------------------------------------------------------------
+
+4. Kernel
+---------
+
+The kernel is the core of the Linux OS. It is responsible for managing
+hardware, memory, devices, and system resources.
+
+Steps performed by the kernel:
+    - Loaded into memory by the bootloader
+    - Extracts and mounts initrd or initramfs (temporary root filesystem)
+    - Loads required drivers and modules
+    - Mounts the real root filesystem (e.g., /dev/sda1)
+    - Starts the first user-space process (PID 1)
+
+Kernel image is usually:
+    - /boot/vmlinuz-<version>
+
+initrd/initramfs:
+    - Temporary filesystem loaded before the real root
+    - Contains essential drivers (e.g., for disk, filesystem)
+
+------------------------------------------------------------------------------
+
+5. Init System (init / systemd)
+-------------------------------
+
+The first process started by the kernel is the init system. This process has
+Process ID 1 and is the parent of all other user-space processes.
+
+Older systems used:
+    - SysVinit (traditional)
+    - Upstart (Ubuntu used this briefly)
+
+Modern systems use:
+    - systemd (used in most modern distros: Ubuntu, RHEL, Fedora, Arch, etc.)
+
+SysVinit:
+    - Uses /etc/inittab to define runlevels
+    - Starts shell scripts from /etc/rc.d/ or /etc/init.d/
+
+systemd:
+    - Starts units instead of scripts
+    - Uses parallel processing to start services faster
+    - Unified logging with journald
+    - Configured using unit files in /etc/systemd/system/
+    - Can replace many other tools (cron, syslog, etc.)
+
+To check the init system:
+    $ ps -p 1 -o comm=
+    Output: "systemd" or "init"
+
+------------------------------------------------------------------------------
+
+6. Runlevels and systemd Targets
+--------------------------------
+
+SysVinit uses runlevels to determine which services to run.
+
+Runlevels:
+    0 - Halt
+    1 - Single-user mode
+    2 - Multi-user (no network, distro-specific)
+    3 - Multi-user with networking
+    4 - Undefined / custom
+    5 - Graphical multi-user
+    6 - Reboot
+
+Defined in: /etc/inittab
+
+systemd replaces runlevels with targets:
+
+Common systemd targets:
+    poweroff.target     - Shutdown (like runlevel 0)
+    rescue.target       - Single-user mode (like runlevel 1)
+    multi-user.target   - Full system without GUI (like runlevel 3)
+    graphical.target    - GUI login screen (like runlevel 5)
+    reboot.target       - Reboot (like runlevel 6)
+
+To check default target:
+    $ systemctl get-default
+
+To set graphical target:
+    $ sudo systemctl set-default graphical.target
+
+------------------------------------------------------------------------------
+
+Boot Flow Summary:
+------------------
+
+  BIOS / UEFI
+      ↓
+  MBR / GPT (partition info)
+      ↓
+  Bootloader (GRUB or systemd-boot)
+      ↓
+  Kernel (vmlinuz + initrd)
+      ↓
+  Init system (init or systemd)
+      ↓
+  Services (runlevels or targets)
+      ↓
+  Login prompt / Desktop
+
+------------------------------------------------------------------------------
+
+Key File Locations:
+-------------------
+
+  /boot/vmlinuz-<version>         → Compressed Linux kernel
+  /boot/initrd.img-<version>      → Temporary root filesystem
+  /boot/grub/grub.cfg             → GRUB configuration
+  /etc/inittab                    → Init runlevel config (SysVinit)
+  /etc/systemd/system/            → systemd unit files
+  /etc/fstab                      → Mount configuration
+  /var/log/boot.log               → Boot logs
+
+------------------------------------------------------------------------------
+
+Additional Notes:
+-----------------
+
+- Most modern Linux distributions use UEFI + GPT + systemd
+- Older distros may still use BIOS + MBR + init
+- systemd is designed to replace multiple older components for efficiency
+- Lightweight or minimal systems (e.g., Alpine Linux, Devuan) may use OpenRC,
+  runit, or SysVinit instead of systemd
+
+------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
