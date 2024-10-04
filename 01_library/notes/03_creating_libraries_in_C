@@ -1,0 +1,212 @@
+# Creating Libraries in C
+
+Overview:
+---------
+Libraries allow you to reuse frequently used functions and achieve modularity. You can create your own static or dynamic libraries.
+
+---
+
+## 1. Static Library
+-----------------
+Definition:
+- Static libraries are collections of object files.
+- Conventionally end with `.a` extension (archive files).
+- Created using the `ar` command.
+- Supports static linking: library functions are copied into executable at compile time.
+- Advantages:
+  - No runtime dependencies
+  - Faster execution (no dynamic symbol resolution)
+  - Portable
+- Disadvantages:
+  - Any library update requires recompiling the main program
+  - Larger executable size
+
+Example: User-Defined Functions
+
+sum.c:
+int sum(int i, int j) {
+    return i + j;
+}
+
+mul.c:
+int mul(int i, int j) {
+    return i * j;
+}
+
+print.c:
+#include <stdio.h>
+void print(char *p) {
+    printf("%s\n", p);
+}
+
+Steps:
+
+1. Compile source files into object files:
+$ gcc -c sum.c -o sum.o
+$ gcc -c mul.c -o mul.o
+$ gcc -c print.c -o print.o
+
+2. Create static library using ar:
+$ ar -rcs libabc.a sum.o mul.o print.o
+Options:
+- r: Replace/add objects
+- c: Create library if new
+- s: Create symbol table
+
+3. List contents:
+$ ar -t libabc.a
+Output:
+sum.o
+mul.o
+print.o
+
+4. Use library in a program:
+
+statp.c:
+#include <stdio.h>
+int main() {
+    int r;
+    print("Hello");
+    r = sum(10, 20);
+    printf("r = %d\n", r);
+    r = mul(10, 20);
+    printf("r = %d\n", r);
+    return 0;
+}
+
+5. Compile and link:
+$ gcc statp.c libabc.a -o statp
+$ gcc -static statp.c libabc.a -o statp   # Fully static
+
+Check:
+$ file statp
+# Output: ELF 64-bit LSB executable ... statically linked
+
+---
+
+## 2. Dynamic Library (Shared Object)
+---------------------------------
+Definition:
+- Collection of position-independent object files.
+- Extension: `.so` (Linux), `.dll` (Windows).
+- Supports dynamic linking: functions not copied into executable at compile time.
+- Advantages:
+  - Shared by multiple programs
+  - Smaller executable size
+  - Easy to update
+- Disadvantages:
+  - Runtime dependency
+  - Slightly slower than static linking
+  - Potential version mismatch or unauthorized sharing
+
+Steps:
+
+1. Compile source files with -fPIC (Position Independent Code):
+$ gcc -c -fPIC sum.c
+$ gcc -c -fPIC mul.c
+$ gcc -c -fPIC print.c
+
+2. Create shared library:
+$ gcc -shared -o libxyz.so sum.o mul.o print.o
+$ file libxyz.so
+# Output: ELF 64-bit LSB shared object ... dynamically linked
+
+3. Program using shared library:
+
+dynap.c:
+#include <stdio.h>
+int main() {
+    int r;
+    print("Hello from dynamic library!");
+    r = sum(5, 15);
+    printf("Sum = %d\n", r);
+    r = mul(3, 6);
+    printf("Mul = %d\n", r);
+    return 0;
+}
+
+4. Compile:
+$ gcc dynap.c ./libxyz.so -o dynap
+$ file dynap
+# Output: dynamically linked
+
+5. Check dependencies:
+$ ldd dynap
+# Output:
+# linux-vdso.so.1 => (0x00007ffdcadf9000)
+# ./libxyz.so => ./libxyz.so (0x00007f04d00c5000)
+# libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6
+# /lib64/ld-linux-x86-64.so.2
+
+---
+
+## 3. Linking Concepts
+---------------------
+- Linking: Combining object code with libraries to produce an executable.
+- Types:
+  1. Static Linking: Address known at compile time
+  2. Load-Time Linking: Address resolved when program loads
+  3. Run-Time Linking: Function loaded on demand at runtime
+
+---
+
+## 4. Dynamic Run-Time Linking (dlopen API)
+-------------------------------------------
+- Also called dynamic linking with dynamic loading
+- Useful for plugins and JIT compilation
+- Load and unload functions on demand
+- Requires <dlfcn.h> API
+
+Important Functions:
+- dlopen(): Load library
+- dlsym(): Get symbol address
+- dlerror(): Error message
+- dlclose(): Unload library
+
+Example: dynamic_load.c
+#include <stdio.h>
+#include <dlfcn.h>
+
+int main() {
+    int r, op, a, b;
+    void *handler;
+    int (*p)(int,int);
+
+    printf("Enter two numbers: ");
+    scanf("%d%d",&a,&b);
+
+    printf("Enter your option:\n1: sum\n2: mul\n");
+    scanf("%d",&op);
+
+    handler = dlopen("./libxyz.so", RTLD_LAZY);
+    if(!handler) { printf("%s\n", dlerror()); return 1; }
+
+    switch(op) {
+        case 1: p = dlsym(handler, "sum"); break;
+        case 2: p = dlsym(handler, "mul"); break;
+        default: printf("Invalid option\n"); dlclose(handler); return 1;
+    }
+
+    if(!p) { printf("%s\n", dlerror()); dlclose(handler); return 1; }
+
+    r = (*p)(a,b);
+    printf("Result = %d\n", r);
+
+    dlclose(handler);
+    return 0;
+}
+
+Compile:
+$ gcc dynamic_load.c -ldl -o dynamic_load
+
+Check with nm: symbols for sum and mul are not present (loaded at runtime)
+
+---
+
+## 5. Summary Table
+
+Library Type | Extension | Linking Time | Executable Size | Dependencies | Update
+------------ | --------- | ------------ | --------------- | ------------ | ------
+Static       | .a        | Compile      | Large           | None         | Recompile
+Dynamic      | .so       | Load/Run     | Small           | Yes          | Replace .so
+
