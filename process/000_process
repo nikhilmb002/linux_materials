@@ -69,8 +69,8 @@ Wait state
 	waiting for an external event to finish. 
 	let us consider scanf(). 
 
-	new process ---------> ready ---------> Running
-                     admitted        dispatcher
+	new process ----------> ready ----------> Running
+                     admitted         dispatcher
 
 	during run time if it waiting for external events then it goes to wait state and if events completed then it goes to ready state. when the cpu is completed other tasks then again dispatcher dispatches to running state. 
 
