@@ -1,0 +1,55 @@
+📚 Libraries in C
+==================
+
+🔹 What is a Library?
+
+        * A library is a collection of predefined functions that are commonly used in C programs.
+        * These functions are precompiled and stored in the form of object files.
+        * The functions in standard libraries are supported and recognized by the compiler.
+                Examples: printf(), scanf(), strlen(), etc.
+
+🔹 How Libraries Work in Compilation
+
+        When a C program is compiled:
+
+                * The compiler converts the source code into object code.
+                * After this, the linker is invoked.
+                * The linker's role is to link the object code with the required library functions.
+                        If our program uses printf(), for example, the linker will fetch its definition from the standard library and link it into our executable.
+
+🔹 Libraries vs Object Files
+
+        * Both object files and libraries contain compiled code.
+        * However, there is a key difference in how they are linked:
+
+        Object Files
+
+                * Entire contents are added to the final executable
+                * Can increase executable size unnecessarily
+
+        Libraries
+
+                * Only the functions actually used are included
+                * More efficient and modular
+
+🔹 Key Features of Libraries
+
+        * A library file stores functions individually, allowing selective linking.
+        * When a function from a library is used:
+                The linker searches the library for that function.
+                Only that specific function's code is added to the executable.
+                The rest of the library is ignored, keeping the executable smaller.
+
+🔹 Naming Convention
+
+        Libraries are typically named with the prefix lib.
+        For example, the standard C library is often referred to as:
+                libc.a (static library)
+                libc.so (shared/dynamic library)
+
+✅ Summary
+
+        * Libraries promote code reuse and help keep executables lightweight.
+        * Only the functions we use are linked from the library.
+        * Libraries are essential in the compilation and linking process in C programming.
+
