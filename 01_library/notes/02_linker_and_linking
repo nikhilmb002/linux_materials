@@ -1,0 +1,61 @@
+🔗 LINKER
+==========
+
+📘 What is a Linker?
+--------------------
+A linker is a system program that combines multiple object files (.o) and libraries (.a / .so) into a final executable file.
+
+It:
+- Resolves symbol references (e.g., function calls, global variables) between modules.
+- Allows modular programming — you don’t need all code in one file.
+
+Without a linker, every program would need to contain all its code in a single file.
+
+
+⚙️ WHAT IS LINKING?
+--------------------
+Linking is the process of combining object code and libraries to produce an executable.
+
+- Performed by a linker (link editor)
+- It’s the last step in the compilation process
+- Can be done in two ways:
+  1. Copying the library code into the executable (Static Linking)
+  2. Referring to the library code that is loaded at runtime (Dynamic Linking)
+
+
+🧩 TYPES OF LINKING
+====================
+
+1️ STATIC LINKING
+-------------------
+- Uses Static Libraries (.a)
+- The linker copies all used library functions into the executable file.
+- The final executable is self-contained (does not depend on external libraries).
+
+✅ Advantages:
+- No need for libraries at runtime.
+- Faster execution (everything included in the binary).
+- Portable — can run anywhere.
+
+❌ Disadvantages:
+- Larger executable size.
+- Must recompile if the library is updated.
+
+2️ DYNAMIC LINKING
+--------------------
+- Uses Shared Libraries (.so)
+- The linker does not copy the library code.
+- Instead, it stores references to the shared library.
+- The shared library is loaded into memory at runtime.
+
+✅ Advantages:
+- Smaller executable size.
+- Multiple programs can share the same library in memory.
+- Easier to update — updating the library updates all dependent programs.
+
+❌ Disadvantages:
+- Library must be present at runtime.
+- Slightly slower startup (libraries are loaded dynamically).
+
+
+
