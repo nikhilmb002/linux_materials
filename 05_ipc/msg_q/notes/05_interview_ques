@@ -1,0 +1,195 @@
+1. What is system V msgq and how does it differ from pipes ?
+
+	A system V msgq is a kernel managed IPC mechanism that allows processes to exchange discrete messages asynchronously. 
+
+	Unlike pipes, msgq are not FIFO only
+	
+	Messages are read based on message type 
+
+	Communicating processes do not need to be alive simultaneously 
+
+
+2. Why must mtype be of the type long in msgq structure ?
+
+	The kernel expects the fiedl of the msg structure to be a long. Using any other type causes incorrect mesg type interpretation, leading to failures like blocked msgrcv() calls, especially on 64 bit systems. 
+
+
+3. Explain the significance of the 4th parameter (msgtyp) in msgrcv() 
+
+	The msgtyp parameter determines which msg is selected from the queue.
+
+	* 0  -> receive the first msg
+	* >0 -> receive the first msg with exact type 
+	* <0 -> receive the msg with lowest type <= absolute value of msgtyp 
+
+
+4. What happens if msgrcv() is called and no message is available ?
+
+	By default the call block until a matching msg arrived. If IPC_NOWAIT is specified, the call returns immediately with errno = ENOMSG 
+
+
+5. Explain IPC_NOWAIT usage in both sender and receiver 
+
+	* In msgsnd() : prevents blocking when the queue is full; returns EAGAIN 
+	* In msgrcv() : prevents blocking when no matching msg exists; returns ENOMSG 
+
+
+6. What is MSG_EXCEPT and when it is used ?
+
+	MSG_EXCEPT is used with msgrcv() when msgtyp > 0. It causes the receiver to read the first message whose type is not equal to the specified type. It is used to skip control or unwanted message types. 
+
+
+7. What happens if MSG_EXCEPT is used and all messages are of the same type?
+
+	The call blocks until a different message type arrives. If IPC_NOWAIT is also specified, it fails immediately with ENOMSG.
+
+
+8. Why is MSG_NOERROR important in embedded systems?
+
+	MSG_NOERROR allows message truncation when the message size exceeds the receive buffer. Without it, msgrcv() fails with E2BIG. This avoids crashes and makes the system more robust.
+
+
+9. What happens without MSG_NOERROR when buffer size is smaller?
+
+	The receive operation fails and sets errno = E2BIG. No data is delivered to the receiver.
+
+
+10. Explain the purpose of msgctl() 
+
+	msgctl() performs control operations on message queues such as retrieving status, changing permissions, and deleting the queue.
+
+
+11. Explain IPC_STAT and IPC_SET
+
+	IPC_STAT: copies message queue information from kernel space into user space
+
+	IPC_SET: updates permission and ownership fields in kernel space
+
+
+12. How is a message queue removed programmatically?
+
+	msgctl(msqid, IPC_RMID, NULL);
+
+
+13. What information does struct msqid_ds store?
+
+	Ownership and permissions
+
+	Timestamps of last send/receive
+
+	Current and maximum bytes in queue
+
+	Number of messages
+
+	PIDs of last sender and receiver
+
+
+14. Why do message queues persist even after a process exits?
+
+	Because message queues live in kernel space and are independent of process lifetime. They must be explicitly removed using msgctl() or ipcrm.
+
+
+15. Why are message queues considered slower IPC mechanisms?
+
+	Because each message involves kernel copies, type matching, and queue management overhead. Shared memory avoids these copies and is significantly faster.
+
+
+16. When would you prefer message queues over shared memory?
+
+	When asynchronous communication, message ordering, message filtering, or decoupled process lifetimes are required.
+
+
+17. How would you debug a blocked msgrcv() call?
+
+	Check message types using ipcs -q
+
+	Verify correct msgtyp
+
+	Ensure mtype is long
+
+	Use IPC_NOWAIT to detect absence of messages
+
+	Check queue permissions
+
+
+18. Why is System V IPC still relevant in SoC/embedded Linux?
+
+	It provides deterministic, type-based IPC with kernel-managed synchronization, which is useful for embedded control paths, legacy systems, and multi-process architectures.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   

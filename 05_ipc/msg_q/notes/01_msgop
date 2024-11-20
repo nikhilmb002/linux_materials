@@ -1,0 +1,35 @@
+man msggop
+----------
+
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys.msg.h>
+
+int msgsnd(int msqid, const void *msgp, size_t msgsz, int msgflg);
+
+ssize_t msgrcv(int msqid, void msgp *msgp, size_t msgsz, long msgtyp,
+                      int msgflg);
+
+	
+	The msgp argument is a pointer to caller-defined structure of the following general form 
+
+	struct msgbuf {
+
+		long mtype;	// message type must be > 0
+		char mtext[1]; 	// message data
+	}	
+
+	
+
+	Message queue Life 
+	------------------
+
+	* Survives process exit 
+	* Destroyed automatically on system shutdown/reboot
+	* Destroyed manually using msgctl (IPC_RMID)/ipcrm 
+
+	refer 02_s.c & 02_r.c
+
+
+
+	

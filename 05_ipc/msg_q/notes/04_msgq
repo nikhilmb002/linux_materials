@@ -1,0 +1,213 @@
+msgsnd() and msgrcv()
+---------------------
+
+Important points:
+
+	1. Design a structure
+
+		A message structure must be designed by the programmer.
+
+		It must contain:
+
+			mtype (message type)
+			message data
+
+	2. Key is required
+
+		A key is required to create or access the message queue using msgget().
+
+	3. In receive, 4th argument is important
+
+		The 4th parameter (msgtyp) in msgrcv() is very important.
+
+		Possible values:
+
+			0
+			+ve
+			-ve
+
+	4. Flag plays an important role
+
+		Flags like IPC_NOWAIT, MSG_EXCEPT, MSG_NOERROR control behavior.
+msgctl()
+--------
+
+	msgctl() is used to perform message queue control operations. 
+
+		int msgctl(int msqid, int cmd, struct msqid_ds *buf);
+		
+		msgctl() performs the control operation specified by cmd
+		The operation is performed on the System V message queue identified by msqid
+
+	struct ipc_perm 
+
+		This structure defines ownership and permissions 
+
+			struct ipc_perm {
+			    key_t  key;        // Key supplied to msgget()
+			    uid_t  uid;        // UID of owner
+			    gid_t  gid;        // GID of owner
+			    uid_t  cuid;       // UID of creator
+			    gid_t  cgid;       // GID of creator
+			    unsigned short mode; // Permissions
+			    unsigned short seq;  // Sequence number
+			};
+		
+	struct msqid_ds
+
+		struct msqid_ds {
+		    
+		    struct ipc_perm msg_perm; // Ownership & permissions
+
+		    time_t msg_stime;  // Time of last msgsnd()
+		    time_t msg_rtime;  // Time of last msgrcv()
+		    time_t msg_ctime;  // Time of last change
+
+		    unsigned long msg_cbytes; // Current bytes in queue
+		    msgqnum_t msg_qnum;       // Current number of messages
+		    msglen_t msg_qbytes;      // Maximum bytes allowed in queue
+
+		    pid_t msg_lspid; // PID of last msgsnd()
+		    pid_t msg_lrpid; // PID of last msgrcv()
+		};
+
+	
+
+	msgctl(msqid, IPC_STAT, &buf);
+		
+		* Copies info from kernel data structure 
+		* Stores it into the msqid_ds structure pointed to by buf 
+
+
+	msgctl(msqid, IPC_SET, &buf);
+
+		* Writes values from user space msqid_ds structure to kernel 
+		* Used to update
+			
+			* msg_perm.uid
+			* msg_perm.gid
+			* msg_perm.mode 
+
+		* Also updates
+
+			* msg_ctime 
+
+	msgctl(msqid, IPC_RMID, NULL);
+
+		* Removes the message queue 
+		* message queue is destroyed from kernel space 
+
+	msgctl(msqid, IPC_INFO, &buf);
+
+		* Returns system-wide message queue limits
+		* Information is stored in structure pointed to by buf 
+
+	Return values 
+
+		On Success 
+
+			IPC_STAT, IPC_SET, IPC_RMID return 0
+
+		On error 
+
+			returns -1
+
+Advantages of Message Queue 
+
+	1. Both processes need not be alive at the same time 
+	2. Transmitter can send data to a particular receiver using a message type 
+
+Disadvantages of Message Queue 
+
+	1. Slowest IPC mechanism 
+
+Solution to Disadvantage 
+	
+	To overcome this disadvantage, shared memory IPC mechanism is used
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

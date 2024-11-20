@@ -1,0 +1,91 @@
+Blocking vs Non Blocking (IPC_NOWAIT)
+
+	* Sender (msgsnd)
+
+		If the message queue is full, msgsnd() blocks by default
+		To avoid blocking, use IPC_NOWAIT
+
+	* Receiver (msgrcv)
+
+		If a message of the requested type is not available, msgrcv() blocks by default
+		To avoid blocking, use IPC_NOWAIT
+
+msgtyp Behavior in msgrcv()
+
+	1. msgtyp = 0
+
+		msgrcv (id, &msg, size, 0, flags);
+
+			* The first message in the queue is read 
+			* Message type is ignored 
+
+	2. msgtyp > 0 
+
+		msgrcv (id, &msg, size, msgtyp, flags);
+
+			* Reads the first message of type = msgtyp 
+
+		with MSG_EXCEPT 
+
+			msgrcv(id, &msg, size, msgtyp, MSG_EXCEPT);
+
+			* Reads the first message whose type is not equal to msgtyp 
+			* Skips message of the given type 
+	
+	3. msgtyp < 0 (priority based receive) 
+
+		msgrcv(id, &msg, size, -N, flags);
+		
+			* Reads the first message with the lowest type 
+			* Message type must be <= |msgtyp|
+
+			Example : 
+
+				Queue Contents (type -> data)
+
+					[ 2:hello ] → [ 1:hai ] → [ 3:bye ] → [ 2:abc ]
+					
+				msgrcv(id, &msg, size, -3, 0);
+
+					* Absolute value of -3 is 3 
+					* Eligible messages types: 1, 2, 3
+					* Lowest type among them is 1
+					* messsage received : "hai"
+
+			If msgtyp is negative, the first message with the lowest type ≤ |msgtyp| is received.
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+					
+			
+					
+
+
+
+
+
+
+
+
+
+
+
+
+	

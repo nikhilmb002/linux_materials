@@ -1,0 +1,188 @@
+Flags 
+----
+
+1. IPC_NOWAIT  
+
+	IPC_NOWAIT is a flag used with System V message queue operations (msgsnd(), msgrcv())
+	
+	Meaning :- 
+
+		* Tells the system call not to block 
+		* The call returns immediately if the operation cannot be completed 
+
+	With msgrcv() 
+
+		msgrcv(msgid, &msg, size, type, IPC_NOWAIT);
+		
+		Behaviour : 
+
+			if a message of the requested type exists -> message is received 
+			if no such message exists -> function fails immediately 
+		
+		Error 
+
+			errno = ENOMSG 
+		
+		No waiting, No blocking 
+
+	with msgsnd() 
+	
+		msgsnd(msqid, &msg, size, IPC_NOWAIT);
+
+		Behaviour : 
+
+			if the queue has space -> message is sent
+			if the queue is full -> function fails immediately 
+
+		Error 
+
+			errno = EAGAIN
+
+	Why IPC_NOWAIT is Used 
+
+		* To avoid blocking the process 
+		* Useful in real-time, embedded, or event-driven programs 
+		* Allows program to handle "no message" case manually 
+	
+
+2. MSG_EXCEPT 
+
+	MSG_EXCEPT is a flag used with msgrcv() in System V message queues.
+
+	Usage 
+
+		msgrcv(msqid, &msg, size, msgtyp, MSG_EXCEPT);
+
+	Meaning 
+
+		Used only when msgtyp > 0 
+		Receives the first message in the queue whose type is not equal to msgtyp 
+
+			Reads the first message except the one with the given msg type
+
+	Behaviour 
+
+		* If msg with a different type exists -> it is received
+		* If all messages are of type msgtyp -> the call blocks
+			(or fails immediately if IPC_NOWAIT is also used)
+
+	Common use case 
+
+		* skip certain msg types
+		* prioritize or filter messages 
+		* ignore control or system messages
+	
+	Example 	
+
+		msgrcv(msqid, &msg, size, 10, MSG_EXCEPT);
+
+		Received the 1st msg whose mtype != 10
+
+3. MSG_NOERROR 
+		
+	this flag is used with msgrcv()
+
+	Purpose 
+
+		* Allows the message to be truncated if the message text is longer than msgsz		     * Prevents the receive operation from failing due to size mismatch 
+
+	Without MSG_NOERROR
+
+		msgrcv(id, &msg, msgsz, type, 0);
+
+		if message size > msgsz 
+
+			call fails 
+			errno = E2BIG
+
+ 	With MSG_NOERROR
+
+		msgrcv(id, &msg, msgsz, type, MSG_NOERROR);
+
+			Message text is truncted 
+			Extra bytes are discarded 
+			Call succeeds 
+
+	Example : 
+
+		Situation 
+
+			Message in queue = "HELLO WORLD" 
+			Receiver buffer size = 5 bytes
+		
+		Without MSG_NOERROR 
+
+			msgrcv(id, &msg, 5, 1, 0);
+	
+				* message size > buffer size 
+				* Receive fails 
+				* errno = E2BIG 
+
+		With MSG_NOERROR
+
+			msgrcv(id, &msg, 5, 1, MSG_NOERROR);
+		
+				* message is truncated 
+				* Extra bytes are discarded	
+				* Receive succeeds 
+
+				Received data
+
+					HELLO
+
+		NOERROR = No error, just cut the message
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	 

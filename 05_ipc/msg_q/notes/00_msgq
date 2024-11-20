@@ -1,0 +1,246 @@
+Message Queue
+-------------
+
+1. msgget()
+2. msgsnd()
+3. msgrcv()
+4. msgctl()
+
+	msgget() : msgget() is useful for the creating as well as opening the mesage queue
+	
+	msgsnd() : it is useful for sending the message in to the message queue 
+
+	msgrcv() : it is useful for receiving the message from the message queue 
+	
+	msgctl() : it is useful for doing some control operation in message queue 
+
+
+msgget -> get a message queue identifier 
+
+	#include <sys/types.h>
+	#include <sys/ipc.h>
+	#include <sys/msg.h>
+
+	int msgget(key_t key, int msgflag); // function prototype
+
+	
+	1. Key :- Message Queue key 
+
+		The key uniquely identifies a msg queue in the system
+
+		Common key values :
+
+			Key value 		Meaning 
+
+			IPC_PRIVATE		Always create a new unique queue
+		
+			Any integer key 	Used to access or create a shared queue 
+
+		
+		If 2 process use the same key, they can communicate using the same queue
+
+	2. msgflag :- Flags & permssions
+
+		Controls :-
+		
+			* Whether to create the queue 
+			* Access permissions 
+
+		Common flags :- 
+
+			Flag 			Meaning 
+
+			IPC_CREAT		Create queue if it doesn't exist 
+			IPC_EXCL		Fail if queue already exist
+			0666			Read/write permissions 
+
+	
+	Return value :-
+
+		On success : returns message queue ID (msqid)
+		On Failure : returns -1 and set errno 
+
+	1. msgget() returns an integer ID that uniquely represents the message queue inside the kernel.
+
+	2. The msgget() system call returns the message queue identifier associated with the value of the key argument 
+
+		if the queue exists :- returns its ID 
+		if it doesn't exist and IPC_CREAT is used -> creates and returns ID 
+		New message queue create value = IPC_PRIVATE 
+
+			msgget(IPC_PRIVATE, 0666 | IPC_CREAT);
+
+				always creates a new queue
+				key is not shared 	
+				mostly used between parent-child process (fork)
+			     other process can't access this queue using the key 
+		
+		No message flag (queue) with given key value = IPC_CREAT
+
+			if no queue exists with the given key -> create it 
+			if queue exists :- open existing queue 
+
+				Example:- 
+
+					msgget(1234, IPC_CREAT | 0665);
+							
+
+	Common msgget() Use cases 
+
+		1. create a new queue (private)
+			
+			int msqid = msgget(IPC_PRIVATE, 0666 | IPC_CREAT);
+			
+				New queue	
+				unique
+				parent-child communication 
+
+		2. Create or Open a shared queue 
+
+			int msqid = msgget(key, IPC_CREAT | 0666);
+
+				Multiple process can accesss
+				Used in client-server IPC 
+		
+		3. Fail if queue already exists 
+
+				msgget(key, IPC_CREAT | IPC_EXCL | 0666);
+
+					Ensure no duplicate queue
+
+		Error Conditions 
+
+			EACCES	 :- permission denied 
+			ENOENT   :- Queue does not exist (no IPC_CREAT)
+			
+		
+		refer 01.c 			
+
+
+	How to show message queue in kernel ?
+
+		ipcs -q
+
+
+	Before running the program 01 $ipcs -q
+
+		------ Message Queues --------
+	key        msqid      owner      perms      used-bytes   messages
+	 - 	     - 		- 	   - 		-	    - 
+
+	After running the program $ipcs -q
+
+		------ Message Queues --------
+	key        msqid      owner      perms      used-bytes   messages
+	0x00000004 0          nmb        644        0            0
+
+
+	remove the message queue using 2 ways :- 
+
+		1. ipcrm -Q
+		2. ipcrm -q 
+
+				Q -> keynum
+				q -> msgid
+
+			Example : ipcrm -Q 4				
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
