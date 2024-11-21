@@ -1,0 +1,164 @@
+man shmop
+---------
+
+#include <sys/shm.h>
+
+void *shmat(int shmid, const void *_Nullable shmaddr, int shmflg);
+int shmdt(const void *shmaddr);
+
+refer 02_s.c 02_r.c
+
+ 
+* The shared memory segment is created in kernel space 
+* Each process attaches this segment into its own user space address range 
+
+
+Kernel Space vs User Space 
+--------------------------
+
+Kernel Space 
+
+	* Maintains 
+
+		* Key 
+		* Shared memory ID 
+		* Shared memory Segment 
+
+ser Space (Per process) 
+
+	* Code section	
+	* Data section
+	* Heap 
+	* Stack 
+	* Shared memory gets mapped somewhere between heap and stack 
+
+Diagram 
+-------
+
+
+            KERNEL SPACE
++-----------------------------------+
+|                                   |
+|   Shared Memory Segment            |
+|                                   |
++-----------------------------------+
+            ▲            ▲
+            |            |
+            | attach     | attach
+            |            |
+-------------------------------------------------
+              USER SPACE (Process)
+
+        +----------------------+
+        |        Stack         |
+        +----------------------+
+                ▲
+                |
+        +----------------------+
+        | Shared Memory        |  <-- attached (no copy)
+        | (same physical mem)  |
+        +----------------------+
+                |
+        +----------------------+
+        |     Data Section     |
+        +----------------------+
+        |     Code Section     |
+        +----------------------+
+
+	
+	Shared memory is not copied, (unlike fork's copy-on-write)
+	All attached process see the same physical memory 
+
+
+Key & ID 
+
+	* key is used to identify the shared memory segment 
+	* Kernel converts the key into a shared memory ID (shmid)
+	* Processes use shmid to attach the segment 
+
+shmat() Explanation
+	
+	void *shmat(int shmid, const void *shmaddr, int shmflg);
+
+		1. shmid 
+
+			shared memory ID returned shmget()
+
+		2. shmaddr 
+
+			usually set to null or 0 
+				
+				user doesn't know the virtual address where shared memory should be placed.
+				Shared memory is created in kernel space, not user space 
+
+			if shmaddr == NULL 
+
+				system automatically chooses a suitable address
+
+		3. shmflag 
+
+			flags (eg : read-only)
+
+Summary 
+
+	* Shared memory is created in kernel space 
+	* It is attached in user space 
+	* Second parameter of shmat() is always 0 / NULL in most cases 
+	* if shmaddr is NULL, the system selects the address automatically 
+	* Shared memory allow fast IPC since no copying involved 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

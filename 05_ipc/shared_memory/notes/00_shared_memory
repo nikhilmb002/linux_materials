@@ -1,0 +1,120 @@
+Shared Memory 
+-------------
+
+	Shared memory is an IPC mechanism that allows multiple process to share the same memory region. 
+
+	Shared memory system calls 
+
+		shmget()
+		shmat()
+		shmdt()
+		shmctl()
+
+	1. shmget()
+
+		Purpose 
+			
+			* Used to create a new shared memory segment 
+			* Used to open an existing shared memory segment 
+
+		Syntax
+
+			#include <sys/shm.h>
+
+			int shmget(key_t key, size_t size, int shmflg);
+		
+		Description 
+
+			Allocates a shared memory segment of given size 	
+			Returns a shared memory identifier (shmid)
+
+	
+	2. shmat()
+
+		Purpose 
+
+			* Used to attach the shared memory segment to a process's address space 
+
+		Syntax 
+
+			void *shmat(int shmid, const void *_Nullable shmaddr, int shmflg);
+
+
+		Meaning 
+
+			After shmat(), the process can read/write shared memory like normal memory 
+
+
+	3. shmdt()
+
+		Purpose 
+
+			* Used to detach the shared memory segment from the process 
+			
+		Syntax 
+
+			int shmdt(const void *shmaddr);			
+
+		Meaning
+
+			* The proces no longer has access to the shared memory 
+
+	4. shmctl()
+
+		Purpose 
+
+			* Used to perfom control operations on shared memory 
+
+		Syntax
+
+			int shmctl(int shmid, int op, struct shmid_ds *buf);		
+		
+		Examples 
+	
+			* Get shared memory information
+			* Change permissions 
+			* Remove shared memory segment 
+
+
+* shmget() allocates a shared memory segment 
+* The memory is allocated in kernel space 
+* The segment can be shared by multiple processes using the same key 
+
+
+malloc() vs shmget()
+
+malloc()
+
+        ptr = malloc(size);
+
+                creates private memory for a process
+                other processes cannot access this memory
+
+shmget()
+
+        shmid = shmget(key, size, flags);
+
+                creates shared memory
+                other processes can access the same memory using the same key
+
+
+		refer 01.c
+
+	ipcs -m : show the shared memory in system
+
+
+
+* key_t key = IPC_PRIVATE means it is private shared memory but can' used by other processes.
+
+
+
+
+
+
+
+
+
+
+
+
+		

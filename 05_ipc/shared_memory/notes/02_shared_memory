@@ -1,0 +1,130 @@
+shmat() return value : 
+
+	Success : return the address of the attached shared memory segment
+	Failure : -1 is returned
+
+shmdt() return value : 
+
+	Success : return 0
+	Failure : -1 and errno 
+
+Flags 
+-----
+
+	1. SHM_RND 
+
+		The attach occurs at the address : 
+
+			* equal to shmaddr
+			* rounded down to the nearest multiple of SHMLBA
+		
+		Used for address alignment 
+
+	2. SHM_RDONLY 
+
+		* Attaches the shared memory segment in read-only mode 
+		* The process must have read permission 
+		* If not specified 
+			
+			* Segment is attached in read-write mode 
+			* Process must have read and write permissions 
+
+	3. SHM_REMAP 
+
+		* Indicates that the mapping of the shared memory segment should: 
+
+			* Replace any existing mapping 
+			* In the address range starting at shmaddr 
+			* Continuing for the size of the segment 
+
+	
+
+	when shmat() is called 
+
+		shm_atime  :- set to current time 
+		shm_lpid   :- set to the calling PID 
+		shm_nattch :- incremented by 1
+
+	when shmdt() is called 
+
+		shm_dtime  :- set to current time 
+		shm_lpid   :- set to the calling PID 
+		shm_nattch :- decremented by 1
+
+	
+	Disadvantages of shared Memory 
+
+		Synchronization Problem 
+
+			If both process access shared memory at the same time 
+			Data may get corrupted 
+			Sychronization mechanisms (semaphores, mutexes) are required 
+
+		shmget() Note 
+			
+			A new shared memory segment is created
+			Actual size allocated is 
+	
+				* Equal to requested size
+				* Rounded up to the narest multiple of PAGESIZE 
+
+
+
+	Data is shared not because it is a file 
+	
+	Data is shared because both processes attach to the same shared memory segement 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		  
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
