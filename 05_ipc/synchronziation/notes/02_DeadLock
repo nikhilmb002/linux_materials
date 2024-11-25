@@ -1,0 +1,188 @@
+Deadlock
+--------
+A deadlock is situation where : 
+
+	* One process is waiting for a resource held by another process
+	* At the same time, the other process is waiting for a resource held by the 1st process 
+	* As a result, neither process can proceed 
+
+	This situation is called deadlock 
+
+
+	Simple defnition 
+	----------------
+	
+		Deadlock occurs when 2 or more processes wait indefinitely for resources held by each other.
+
+
+	p1, p2 -> Processes 
+	r1, r1 -> Resources/locks 
+	data, data1 -> shared resources
+	r = 1 -> resources locked
+	r = 0 -> resource free 
+
+	Normal Execution - No Deadlock 
+	------------------------------
+
+	Step by Step 
+
+		1. first time, process p1 locks both resources 
+
+			r1 = 1, r2 = 1
+
+				p1 enters critical section 
+				p2 is waiting 
+
+		2. p1 completes its work 
+
+			releases both resources 
+
+				r1 = 0, r2 = 0 
+
+		3. p2 not enters 
+
+			Locks resources 
+			writes data safely
+
+		No deadlock 
+		Proper synchronization 
+
+
+	Deadlock situation 
+	------------------
+
+	Scenario 
+
+		process p1
+			
+			Holds resource r1 
+			Needs resource r2 
+
+		process	p2 
+
+			Holds resource r2
+			Needs resource r1
+
+	        r1                     r2
+	     -------->              -------->
+	    |         |            |         |
+	    |   P1    |            |   P2    |
+	    |         |            |         |
+	    <--------              <--------
+		r2                     r1
+
+		Explanation 
+
+			p1 locks r1
+				
+				r1 = 1
+
+			p2 locks r2 
+	
+				r2 = 1
+
+			p1 waits for r2 
+	
+				but r2 is held by p2
+
+			p2 waits for r1 
+
+				but r1 is held by p1 
+
+			Both process wait forever 
+			No progress possible 
+			Deadlock occurs 
+
+	
+Why deadlock happens ?
+
+
+	Deadlocks happens when all the following conditions hold : 
+
+
+		1. Mutual exclusion 
+
+			Resources cannot be shared 
+
+		2. Hold and wait 
+	
+			Process holds one resource and waits for another 
+
+		3. No preemption
+		
+			Resources cannot be forcibly taken 
+
+		4. Circular wait 
+
+			Circular dependency among process 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		

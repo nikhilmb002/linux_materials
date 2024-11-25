@@ -1,0 +1,89 @@
+Shared Resource Scenario
+------------------------
+
+	2 process p1 and p2 want to access the same shared data.
+
+	To avoid data corruption, a lock variable r1 is used.
+
+		- p1, p2 -> Processes 
+		- data -> Shared resource 
+		- r1 -> Lock variable 
+		
+			r1 = 0 -> Resource is free
+			r1 = 1 -> Resource is busy / locked
+
+	
+Diagram (Conceptual)
+--------------------
+
+	+-----------+        +------+
+	|  P1       | -----> | data |
+	+-----------+        +------+
+	       |
+ 	       r1
+	       |
+	+-----------+        +------+
+	|  P2       | -----> | data |
+	+-----------+        +------+
+
+
+	Working critical section 
+
+		1. Process p1 checks r1 
+	
+			if r1 == 0, resource is free 
+		
+		2. p1 enters critical section
+
+			sets r1 = 1 (lock accquired)
+			write data into shared 
+			
+		3. while p1 is inside critical section 
+	
+			r1 == 1
+			process p2 checks r1
+			since r1 == 1, p2 waits 
+
+		4. p1 finishes its work 
+	
+			sets r1 = 0 (lock released)
+
+		5. p2 now enters critical section 
+
+			sets r1 = 1
+			writes data 
+			after completion, sets r1 = 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

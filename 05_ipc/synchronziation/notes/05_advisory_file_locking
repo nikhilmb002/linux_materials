@@ -1,0 +1,100 @@
+What is advisory Locking ?
+
+	- Locks are not forced by the OS 
+	- All processes must cooperate 
+	- Used to protect critical section in files 
+
+Locking Commands 
+
+	F_GETLK  :- Check if lock exists
+	
+	F_SETLK  :- Set / release lock (non-blocking)
+
+	F_SETLKW :- Set lock (wait if unavailable)
+
+
+Lock Types 
+
+	F_RDLCK 	// Read Lock 
+	F_WRLCK		// Write Lock
+	F_UNLCK		// Unlock 
+
+
+Struct flock 
+
+	struct flock {
+	    
+	    short l_type;     // F_RDLCK, F_WRLCK, F_UNLCK
+	    short l_whence;   // SEEK_SET, SEEK_CUR, SEEK_END
+	    off_t l_start;    // Starting offset
+	    off_t l_len;      // Number of bytes to lock
+	    pid_t l_pid;      // PID (used with F_GETLK)
+	};
+
+
+Region Locking Example 
+
+	v.l_start = 10;
+	v.l_len   = 5;
+
+	Bytes 10 to 15 are locked 
+
+	|---------|XXXXXXXX|---------|
+	          10      15
+
+
+Locking flow 
+
+
+	P1  --->  lock file region  --->  write data  ---> unlock
+	P2  --->  waits for lock    --->  write data
+
+
+Why F_SETLKW is used ?
+
+	if lock is available -> acquired immediately 
+	if not available     -> process waits 
+
+	prevents race conditions in file access 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

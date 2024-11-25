@@ -1,0 +1,109 @@
+What is fcntl() ?
+
+	fcntl() is a system call used to manipulate file desciptors 
+
+	Using fcntl(), we can : 
+
+		* Duplicate file descriptors 
+		* Get/set file descriptor flags 
+		* Get/set file status flags 
+		* Perform file locking 
+
+
+Header files 
+	
+	#include <unistd.h>
+	#include <fcntl.h>
+	
+
+Function prototype 
+
+	int fcntl(int fd, int cmd, ... /* arg */);
+
+	fd  -> file descriptor 
+	cmd -> operation to perform 
+	arg -> optional argument (depends on cmd)
+
+	Whether arg is required depends on cmd 
+
+
+Purpose of fcnt()
+
+	The main aim of fcntl() is file descriptor control and file locking/unlocking 
+
+
+F_DUPFD - Duplicate file descriptor 
+
+	find the lowest available file desciptor >= arg and makes it a duplicate of fd
+
+	newfd = fcntl(fd, F_DUPFD, arg);
+
+	Example : 
+
+		fd1 = fcntl(fd, F_DUPFD, 10);
+		
+		Output 
+
+			fd1 = 11 
+
+			Explanation 
+			
+				OS searches from fd 10 
+				First fee fd found = 11
+				11 becomes a copy of fd 
+
+			Difference from dup() 
+
+				dup() -> lowest free fd 
+				F_DUPFD -> lowest free fd starting from arg 
+
+F_GETFD - Get FD flags 
+
+	flags = fcntl(fd, F_GETFD);
+
+		Reads file descriptor flags
+		arg is ignored 
+
+	Example flag 
+
+		FD_CLOEXEC
+
+			close this file desciptor automatically when exec() is called. 
+
+
+F_SETFD - Set FD flags 
+
+	fcntl(fd, F_SETFD, flags);
+
+		Sets file descriptor flags 
+		
+	Example 
+
+		fcntl (fd, F_SETFD, FD_CLOEXEC);
+
+F_GETFL - Get File Status Flags 
+
+	flags = fcntl(fd, F_GETFL);
+	
+	Returns : 
+
+		Accesss mode (O_RDONLY, O_WRONLY, O_RDWR)
+		Status flags (O_APPEND, O_NONBLOCK, etc)
+
+		arg is ignored 
+
+
+F_SETFL - Set File Status Flags
+
+	fcntl(fd, F_SETFL, O_NONBLOCK);
+
+	Used to set flags like 
+
+		O_NONBLOCK
+		O_APPEND
+		
+	Access modes and creation flags are ignored 
+	
+		O_RDONLY, O_WRONLY, O_CREAT, etc cannot be changed 
+
+

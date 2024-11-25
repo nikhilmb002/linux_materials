@@ -1,0 +1,31 @@
+refer 00w1.c and 00w2.c
+
+	• Both programs write to the same file concurrently
+	• Each write is only one byte long
+	• No synchronization (locks, semaphores) is used
+	• This results in a race condition
+	• Output in the file is interleaved and non-deterministic
+
+
+critical section of code 
+------------------------
+
+	The part of the program where we trying to access shared resource is crtical section of the code 
+
+	A shared resource must be accessed by only one process at a time 
+
+	Before entering the critical section, a process must check whether the shared resource is free
+	
+	If the resource is free : 
+
+		The process locks the resource 
+		Enters the critical section 
+
+	While one process is inside the critical section : 
+
+		Other processes must wait 
+
+	After completing the operation : 
+
+		The process unlocks the resource 
+		Other processes can then enter the critical section 

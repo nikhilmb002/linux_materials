@@ -1,0 +1,166 @@
+What is file descriptor ?
+
+	* A file descriptor (FD) is a number used by the OS to identify an open file
+	* Every process starts with these FDs :
+		
+		0 -> STDIN  (keyboard)
+		1 -> STDOUT (terminal)
+		2 -> STRERR (terminal)
+
+
+What is dup() ?
+
+	dup() creates a copy of a file descriptor 
+	
+	int newfd = dup(oldfd);
+
+		The new FD points to the same file 
+		OS chooses the lowest free FD number 
+
+	Example 
+
+		int fd = dup(1);
+
+			1 = STDOUT 
+			Next free FD = 3 
+
+			0 -> STDIN
+			1 -> STDOUT
+			2 -> STDERR
+			3 -> STDOUT (duplicate)
+
+			Output printed using FD 3 will go the terminal 
+
+
+What is dup2() ?
+
+	dup2(oldfd, newfd);
+		
+		newfd becomes a copy of oldfd
+		if newfd is already open -> it is closed first 
+
+
+	Example 
+
+		dup2(1, 5);
+
+			5 -> STDOUT 
+
+		Used heavily in redirection 
+
+
+Key Differences 
+
+	Function 		What it does 
+
+	  dup()			Uses lowest free FD 	
+	
+	  dup2()		Uses specified FD 
+
+	  dup3() 		Same as dup2() + flags
+
+
+Why dup() is important 
+
+	dup() is used for 
+		
+		output redirection (>, >>)
+		input redirection (<)
+		pipes (|)
+		Shell implementation 
+
+	Without dup() shells cannot work 
+
+
+Why shells need dup()
+
+	A shell : 
+
+		1. Creates process using fork()
+		2. Redirects input/output using dup() or dup2()
+		3. Executes commands using exec()
+
+		dup() connects standard input/output to files or pipes.
+
+
+Who is supporting pipelining mechanism ?
+
+	Bash 
+	
+	Other Shells: 
+		
+		sh
+		zsh
+		dash
+	
+	The shell implments pipelining using : 
+
+		pipe() + fork() + dup() + exec()
+
+
+What is pipelining ?
+
+	Pipelining is a mechanism that connects the output of one command to input of another command 
+
+	Example : 
+
+		ps -el | grep pts/0 
+
+		ps output -> pipe -> grep input 
+
+
+How shell pipelining works ?
+
+	1. shell creates a pipe 
+	2. Forks 2 processes 
+	3. Uses dup() to 
+		
+		* redirect stdout of 1st command 
+		* redirect stdin of 2nd command 
+
+	4. Executes both commands 
+
+
+Advantages of shell pipelining 
+	
+	* Commands can run simultaneously 
+	* No need for temporary files 
+	* Faster than sequential execution 
+	* Clean and efficient IPC 
+
+
+
+What is processor pipelining ?
+
+	A CPU technique where instruction execution is divided into stages and overlapped to improve perfomance 
+
+
+Advantages of processor pipelining 
+
+	* Reduces instruction execution time 
+	* Increases CPU throughput 
+	* Improves overall system perfomance
+	* Allows faster arithmetic unit design 
+
+
+Disadvantage of processor pipelining 
+	
+	* Requires additional hardware 
+	* Pipeline stalls may occur
+	* Cannot always run at full speed
+	* Complex design and control 
+
+	This has no direct relation to dup() or shell pipes
+
+
+Advantages of dup()
+
+	* Enables input/output redirection 
+	* Makes shell pipelins possible
+	* Allow multiple file descriptor to refer to same file 
+	* Efficient (no data copying)
+	* Essential for shell and IPC mechanisms
+
+
+
+
