@@ -1,0 +1,290 @@
+fork()
+-----
+fork() is a system call 
+pid_t fork(void);
+
+fork - creates a new process by duplicating the calling process. The new process is referred to as the child process. Teh calling process is referred to as the parent process. 
+
+	refer p3.c
+
+	then 
+
+	refer p4.c 
+
+	
+fork return type is  pid_t (typedefined integer) 
+
+	On sucess fork() returns : the PID of the child proccess is returned in the parent and 0 is returned in the child. On failure, -1 is returned in the parent, no child process is created. 
+
+	refer p5.c
+
+	
+
+Common cases where fork() fail and return -1
+	
+	* Process limit exceeded (EAGAIN)
+
+		the user has reached the maximum no.of processes allowed 
+		system-wide process limit is exceeded
+	
+	* Insufficient memory 
+
+		not enought physical memory or virtual memory 
+		kernel cannot allocate 
+	
+			* PCB
+			* kernel stack 
+			* page tables 
+
+	* Kernel resourc exhaustion 
+
+		Lack of kernel resources such as 
+
+			* PID structures
+			* Task structures 
+			* kernel stacks 
+
+	* Overcommit restrictions
+
+		if memory overcommit is disabled or restricted 
+
+What happens when fork() fails ?
+
+	* fork() return -1
+	* errno is set
+	* parent continues execution 
+	* child process is not created 
+
+						
+
+
+	refer p6.c 
+	
+	refer p7.c 
+
+	refer p8.c 
+
+	refer p9.c 
+
+int main() {
+
+	printf("hi\n");
+	fork();
+	printf("hello\n");
+}
+
+	output will be : 
+
+		hi 
+		hello
+		hello 
+
+---------
+
+
+int main() {
+
+	printf("hi");
+	fork();
+	printf("hello\n")
+}
+
+	output will be : 
+
+		hihello
+		hihello
+
+--------
+
+* When a process is created by default each process associated with 3 buffers 
+
+	1. stdin
+	2. stdout 
+	3. stderr
+
+	|--------|
+	| scanf  | <------------ [ stdin ] <------------
+	| printf | ------------> [ stdout ] -----------> 
+	| perror | ------------> [ stderr ] ----------->
+	|	 |
+	----------
+	[process]
+
+
+	
+				 stdout
+				
+	[ printf("hello"); ] -> [ hello ] -> [ screen ]
+
+	
+	From the stdout buffer the content is flushed out 
+
+		* when there is a \n
+		* when the process is terminated 
+		* when there is fflush() function 
+		* when the buffer is full 
+
+
+		thats why the following program is not giving any output
+
+
+			int main() {
+
+				printf("hello");
+				while(1);
+			}
+
+			if fflush(stdout) used that time it will work. 
+---------
+
+
+int main() {
+
+        printf("hi");
+        fork();
+        printf("hello\n")
+}
+
+        output will be :
+
+                hihello
+                hihello
+
+   In this 
+
+
+	once process is executed 
+
+		hi will enter into stdout buffer but it will not display on screen
+		then because of the fork() new procecss is created 
+		it will duplicate the parent process as : 
+
+			main() {
+
+				.....
+				printf("hello\n");		
+			}
+
+
+			the child have stdout buffer which duplicated from parent, so the child stdout buffer also have hi. 
+			then hello will enter and flushedout due to \n so hihello printed
+		
+		parent also have hello\n then it also entering and flushing stdout hihello printed..
+
+		
+---------
+
+
+int main() {
+
+	printf("hi");
+	fork();
+	printf("hello");
+}
+
+	output : hihellohihello
+
+---------
+
+int main() {
+
+	printf("hi\n")
+	fork();
+	fork();
+	fork();
+	printf("hello\n");
+}
+
+
+-----------------
+
+
+In parent and child process combination
+
+	parent process always as foreground process and child process act as background 
+	
+	refer p12.c
+
+
+What is copy-on-write (COW)
+
+	using fork() when a new process is created that is called child process from which process it is created it is called parent process.
+
+	A variable that is common to both the parent and child processes is stored in a memory location known to both. As long as both processes only read this shared data, there is no problem. However, if either the parent or the child process modifies the shared data, the operating system creates a separate copy of that memory page for the modifying process. This mechanism is known as copy-on-write.
+
+
+	refer p13.c
+
+	
+What is orphan process ?
+
+	In parent and child process relation if parent process terminated first than child process is called orphan process. 
+
+	for all orphan process init (pid : 1) will act as parent 
+
+	refer p14.c
+
+
+What is Zombie process ?
+
+	In parent and child prcoess relation if child process terminated first, but parent process not terminated (not collected the status of the child) then child becomes Zombie process. 
+
+	The resource is not released. 
+		
+	refer p15.c
+	
+	Creating Zombie process resource shortge will occur. 
+
+	To avoid this parent need to collect the status of the child. 
+
+	refer 16.c 
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

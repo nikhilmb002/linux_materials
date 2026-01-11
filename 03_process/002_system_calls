@@ -1,0 +1,369 @@
+Library Functions and System calls
+----------------------------------
+
+Library functions are supported by the compiler and part of std libraries. 
+
+	Ex : printf(), scanf(), fopen(), fgetc(), malloc(),...
+
+	Library function execute in user mode. 
+
+
+System Calls are supported by the kernel and provide a way for user programs to request kernel services. 
+
+	Ex : open(), read(), ...
+
+man command and manual sections 
+
+	Example : 
+
+		$ man man 
+
+		output : 
+
+			Interface to the man reference manual 
+
+		The table below shows the section number of the manual followed by the types of pages they contain : 
+
+		1   Executable programs or shell commands
+		2   System calls (functions provided by the kernel)
+		3   Library calls (functions within program libraries)
+		4   Special files (usually found in /dev)
+		5   File formats and conventions, e.g., /etc/passwd
+		6   Games
+		7   Miscellaneous (macro packages and conventions)
+    		    e.g., man(7), groff(7), man-pages(7)
+		8   System administration commands (usually only for root)
+		9   Kernel routines (non-standard)
+
+	A manual page consists of several sections such as NAME, SYNOPSIS, DESCRIPTION, RETURN VALUE, etc.
+
+
+Relationship Between Library Functions and System Calls
+
+	Library functions internally call system calls to access kernel services. 
+
+	Example mapping 
+
+	printf()        fgetc()         fopen()        // User mode
+	   |               |               |
+	   |               |               |
+	 [              System Calls              ]
+	   |               |               |
+	 write()         read()          open()        // Kernel mode
+
+
+User space and kernel Space Interfaction 
+	
+		[ User Application ]
+        		|
+		[ System Call Interface ]  <----- Interface between user mode & kernel mode
+          		|
+     		 [ Kernel Mode ]
+
+	* User applications cannot access hardware directly.
+	* System calls act as a controlled gateway to the kernel.
+
+
+----------------------------------------------------------------------------------------
+    Library function             |      System calls					|
+----------------------------------------------------------------------------------------
+* Supported by compiler          | * supported by kernel                                |
+                                                                                        |
+* Library functions portable     | * System call not portable                           |
+
+* Another name is API            | * Another name is system call interface              |
+                                                                                        |
+* Writing program using API's    | * Using SCI it is called system programming          |
+called as application programing |
+                                                                                        |
+* process calling lib function   | * process calling system calls executes slower       |
+  executes faster                |                                                      |
+
+* Debugging of lib function is   | * Debugging of system calls is difficult             |
+  easy                           |                                                      |
+                                                                                        |
+* Lib functions executes in user | * System calls executes in kernel mode
+  mode                           |                                                      |
+				 |							|
+-----------------------------------------------------------------------------------------
+
+malloc() and system calls 
+
+	malloc is a lib function.
+
+	when malloc() is called : 
+
+		* The memory manager handles the requeust. 
+		* Internally, malloc() calls the brk() system call.
+		* brk() interacts with the kernel memory manager.
+		* Memory is reserved and returned to malloc()
+		* Finally, malloc() returns the memory address to the application. 
+
+Direct Use of system calls
+
+	If an application needs direct kernel services, it must use system calls directly.
+
+	Example : 
+
+		socket()
+
+fgetc() vs read()
+
+	[fgetc()]   → User mode
+	----------------------
+	[ read() ]  → Kernel mode
+
+	
+	* read() :
+
+		reads multiple characters at once 
+		stores them in a buffer in user space 
+
+	* fgetc() : 
+
+		returns 1 character at a time 
+		fetches data from the buffer, not from the kernel each time 
+
+	When library functions are used, frequent switching between user space and kernel space is avoided, improving perfomance.
+
+
+Return Value of System Calls
+	
+	* Every system call returns a value 	
+	* Based on the return value, we can identify whether the system call : 
+
+		* suceeded
+		* failed (usually returns -1 and sets errno)
+
+		refer p2.c 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Library functions are supported by compiler.
+
+	eg : printf(), scanf(), fopen(), fgetc(),....
+
+System calls are kernel supported 
+
+	$ man man 
+
+		interface to the man reference manual 
+	
+       The  table  below  shows the section numbers of the manual followed by the types of
+       pages they contain.
+
+       1   Executable programs or shell commands
+       2   System calls (functions provided by the kernel)
+       3   Library calls (functions within program libraries)
+       4   Special files (usually found in /dev)
+       5   File formats and conventions, e.g. /etc/passwd
+       6   Games
+       7   Miscellaneous  (including  macro  packages  and  conventions),   e.g.   man(7),
+           groff(7), man-pages(7)
+       8   System administration commands (usually only for root)
+       9   Kernel routines [Non standard]
+
+       A manual page consists of several sections.
+
+
+Library functions internally calls system calls. 
+
+	printf() 	fgetc()		fopen()		// user mode 
+
+	  |		  | 		  |
+
+	[	     system calls		]
+       	
+	  |		  |		  |
+
+	 write()	read()		open()		// kernel mode 
+
+
+
+	
+
+
+
+	[User Application]
+
+		|
+
+	[System call interface]	--------------|
+					      ------> Inteface between usermode & kernelmode
+		| 
+
+	   [ 	     ]   kernel mode 
+
+
+
+
+    Library function		 |	System calls 
+----------------------------------------------------------------------------------------
+* Supported by compiler		 | * supported by kernel 				|
+											|
+* Library functions portable 	 | * System call not portable 				|
+
+* Another name is API 	  	 | * Another name is system call interface 		|
+											|
+* Writing program using API's    | * Using SCI it is called system programming		|
+called as application programing |
+				 							|
+* process calling lib function   | * process calling system calls executes slower	|
+  executes faster 		 |							|
+
+* Debugging of lib function is   | * Debugging of system calls is difficult		|
+  easy 				 |							|
+											|
+* Lib functions executes in user | * System calls executes in kernel mode 		
+  mode 				 |							|
+
+
+
+malloc is a library function, whenever we are using malloc memory manager is allocating memory. when we are calling malloc it is calling brk() system call. Then brk() interact with memroy manager and reserve the memory. then that is passed to malloc function. 
+
+Suppose our application needs kernel services directly we need to use system calls directly 
+
+	example : socket 
+
+
+
+	[fgetc()]    user mode 
+
+--------------------------------
+
+	[ read() ]   kernel mode
+
+
+
+	fgetc will take a character at a time but read will take all character and keep it in a buffer in the user space, fgetc() will take each character at a time. next time it will fetch the data from the buffer only. 
+
+	If library function are using that time every time switching from user space to kernel space not required. 
+
+
+Based on return value of the task assigned we can identify the system call is sucess or not. 
+
+
+	refer p1.c 
+
+system() -> Library function
+
+        using system function possible to execute a shell command
+
+
+        main() {
+
+                printf("Hi...\n");
+                system("ls");
+                printf("Bye\n");
+        }
+
+        $ cc p2.c
+
+        $./a.out
+
+        Bash will be parent for ./a.out
+        Then Hi... is printed and sh shell is invoked and ls cmd is executed and shell is ter minated and Bye will be printed.
+
+
+        system() will return 0 on success and -1 on failure
+
+
